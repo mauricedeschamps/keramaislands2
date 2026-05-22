@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0a2f2a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#fef9e6" media="(prefers-color-scheme: light)">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Kerama Islands">
+    <link rel="apple-touch-icon" href="icons/icon-192.jpg">
+    <link rel="manifest" href="manifest.json">
+    <title>Kerama Islands Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s;
+        }
+
+        :root {
+            --bg-body: #0a0f1a;
+            --bg-surface: #1e2a2a;
+            --card-bg: #2a3b3b;
+            --text-primary: #f0f9f4;
+            --text-secondary: #cbd5e1;
+            --border: #3e5a5a;
+            --accent: #ffb347;
+            --accent-glow: #ff9f4a;
+            --gradient-title: linear-gradient(135deg, #FFD166, #FF9F4A, #FF6B6B);
+            --shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        body.light-mode {
+            --bg-body: #fef9e6;
+            --bg-surface: #ffffff;
+            --card-bg: #fff6ed;
+            --text-primary: #1e2a2a;
+            --text-secondary: #2d4a4a;
+            --border: #ffddb0;
+            --shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-primary);
+            line-height: 1.5;
+            padding: 0;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.2rem 1.5rem 2rem;
+        }
+
+        /* header */
+        .app-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .title-gradient {
+            background: var(--gradient-title);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 1rem;
+        }
+
+        button {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            transition: transform 0.1s, background 0.2s;
+        }
+
+        button:active {
+            transform: scale(0.96);
+        }
+
+        button.active-lang {
+            background: var(--accent);
+            color: #1e2a2a;
+            border-color: var(--accent);
+        }
+
+        .mode-toggle {
+            background: var(--card-bg);
+        }
+
+        /* cards & layout */
+        .island-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+            margin: 2rem 0;
+        }
+
+        .island-card {
+            background: var(--card-bg);
+            border-radius: 2rem;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        @media (min-width: 640px) {
+            .island-card {
+                flex-direction: row;
+            }
+            .card-img {
+                width: 200px;
+                height: auto;
+            }
+        }
+
+        .card-img {
+            background: #2f4f4f;
+            object-fit: cover;
+            width: 100%;
+            height: 180px;
+        }
+
+        .card-content {
+            padding: 1.2rem 1.5rem;
+            flex: 1;
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .beach-list {
+            font-size: 0.9rem;
+            color: var(--accent);
+            margin-bottom: 0.8rem;
+        }
+
+        .detail-btn {
+            background: var(--accent);
+            color: #1a2a2a;
+            border: none;
+            margin-top: 0.8rem;
+            font-weight: bold;
+        }
+
+        .sponsor-area {
+            background: var(--bg-surface);
+            border-radius: 1.5rem;
+            padding: 1rem;
+            text-align: center;
+            border: 1px dashed var(--accent);
+            margin: 1.5rem 0;
+        }
+
+        .sponsor-placeholder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .sponsor-item {
+            background: rgba(255,180,80,0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+        }
+
+        .map-placeholder {
+            margin: 2rem 0 1rem;
+            text-align: center;
+            border-radius: 2rem;
+            overflow: hidden;
+            background: var(--bg-surface);
+        }
+
+        .map-placeholder img {
+            width: 100%;
+            max-height: 220px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1.5rem 0 1rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .back-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .detail-section {
+            background: var(--card-bg);
+            border-radius: 2rem;
+            padding: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 5px solid var(--accent);
+            padding-left: 0.8rem;
+        }
+
+        .detail-text {
+            white-space: pre-line;
+            line-height: 1.6;
+        }
+
+        .official-link {
+            display: inline-block;
+            margin-top: 0.8rem;
+            background: var(--accent);
+            color: #1e2a2a;
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        hr {
+            border-color: var(--border);
+            margin: 1rem 0;
+        }
+
+        .island-hero-img {
+            width: 100%;
+            max-height: 280px;
+            object-fit: cover;
+            border-radius: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1rem;
+            }
+            .title-gradient {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="appRoot">
+        <!-- dynamic content will be rendered here -->
+    </div>
+    <script>
+        // ----------------------------- MULTI-LANG DATA ---------------------------------
+        const translations = {
+            en: {
+                app_title: "Kerama Islands Escape",
+                ferry_info: "⛴️ From Naha Airport → Tomari Port (15min taxi/monorail) → Ferry to Kerama Islands. High-speed boats (35-70min) & ferries. Check weather!",
+                sponsor_hint: "✨ Sponsor zone - replace image & URL below ✨",
+                to_islands: "Our Islands",
+                back_home: "← Back to Main",
+                back_prev: "← Previous / Home",
+                contact: "Contact us",
+                email: "mementomorikatsu@gmail.com",
+                map_alt: "Kerama Islands Map (replace with actual map)",
+                ferry_schedule_note: "Ferries from Tomari Port: Tokashiki (70min), Zamami/Aka (50min). Timetable varies, confirm on sunny days.",
+                common_beaches: "Beaches",
+                transport_info: "Transportation & Rental",
+                shops_restaurants: "Local Shops & Eateries",
+                accommodations: "Accommodations",
+                official_website: "Official Website",
+                sponsor_edit_comment: "// Replace sponsor image & link below //"
+            },
+            it: {
+                app_title: "Fuga alle Isole Kerama",
+                ferry_info: "⛴️ Dall'aeroporto di Naha → Porto di Tomari (15min taxi/monorotaia) → Traghetto per le isole Kerama. Aliscafi (35-70min) e traghetti. Attenzione al meteo!",
+                sponsor_hint: "✨ Sponsor - sostituisci immagine e URL ✨",
+                to_islands: "Le Nostre Isole",
+                back_home: "← Torna alla Home",
+                back_prev: "← Indietro / Home",
+                contact: "Contattaci",
+                email: "mementomorikatsu@gmail.com",
+                map_alt: "Mappa delle Isole Kerama (sostituire con mappa reale)",
+                ferry_schedule_note: "Traghetti da Tomari Port: Tokashiki (70min), Zamami/Aka (50min). Orari variabili, assicurati di andare in una giornata di sole.",
+                common_beaches: "Spiagge",
+                transport_info: "Trasporti e Noleggi",
+                shops_restaurants: "Negozi locali e Ristoranti",
+                accommodations: "Alloggi",
+                official_website: "Sito Ufficiale",
+                sponsor_edit_comment: "// Sostituisci immagine sponsor e link sotto //"
+            },
+            ru: {
+                app_title: "Острова Керама: Рай",
+                ferry_info: "⛴️ Из аэропорта Наха → Порт Томари (15 мин такси/монорельс) → Паром на острова Керама. Скоростные катера (35-70 мин) и паромы. Проверяйте погоду!",
+                sponsor_hint: "✨ Спонсорская зона - замените изображение и URL ✨",
+                to_islands: "Наши острова",
+                back_home: "← На главную",
+                back_prev: "← Назад / Главная",
+                contact: "Связаться с нами",
+                email: "mementomorikatsu@gmail.com",
+                map_alt: "Карта островов Керама (замените на реальную карту)",
+                ferry_schedule_note: "Паромы из порта Томари: Токашики (70 мин), Дзамами/Ака (50 мин). Расписание меняется, езжайте в солнечный день.",
+                common_beaches: "Пляжи",
+                transport_info: "Транспорт и аренда",
+                shops_restaurants: "Местные магазины и кафе",
+                accommodations: "Проживание",
+                official_website: "Официальный сайт",
+                sponsor_edit_comment: "// Замените изображение спонсора и ссылку ниже //"
+            },
+            ja: {
+                app_title: "慶良間諸島 楽園ガイド",
+                ferry_info: "⛴️ 那覇空港→泊港（タクシー・モノレール約15分）→慶良間諸島へフェリー。高速船（35〜70分）・フェリー。晴れた日に出かけましょう！",
+                sponsor_hint: "✨ スポンサー枠 - 画像とURLは後ほど差し替え可能 ✨",
+                to_islands: "慶良間の島々",
+                back_home: "← メインページへ戻る",
+                back_prev: "← 戻る / ホーム",
+                contact: "お問い合わせ",
+                email: "mementomorikatsu@gmail.com",
+                map_alt: "慶良間諸島マップ（後でイメージ追加）",
+                ferry_schedule_note: "泊港発: 渡嘉敷島（70分）、座間味・阿嘉（50分）。天候により変動。",
+                common_beaches: "ビーチ",
+                transport_info: "島内交通・レンタル",
+                shops_restaurants: "お店・食堂",
+                accommodations: "宿泊施設",
+                official_website: "公式サイト",
+                sponsor_edit_comment: "// スポンサー画像とリンクをここに差し替え //"
+            }
+        };
+
+        // Island data (detailed descriptions per lang)
+        const islandsData = {
+            tokashiki: {
+                id: "tokashiki",
+                name_jp: "渡嘉敷島",
+                beaches: "Aharen Beach, Tokashiku Beach",
+                imgPlaceholder: "https://placehold.co/800x400/2f6b47/white?text=Tokashiki+Island",
+                details: {
+                    en: "🚲 Transportation: Shuttle bus from port to Aharen Beach (¥400), bicycle/scooter rentals (¥1500~/day). Taxi available.\n🏄 Rental shops: Snorkel gear, kayaks, beach umbrellas at Aharen Beach.\n🍜 Local shops: Small grocery near port & souvenir shops.\n🍽️ Restaurants: Seaside cafes serving Okinawa soba, fresh seafood bowls.\n🏠 Accommodation: Guesthouse 'Kerama Blue', beach bungalows, camping at Tokashiku Beach.",
+                    it: "🚲 Trasporti: Navetta dal porto ad Aharen Beach (¥400), noleggio bici/scooter (¥1500~/giorno). Taxi disponibile.\n🏄 Noleggio: Attrezzatura snorkeling, kayak, ombrelloni.\n🍜 Negozi: Piccolo market vicino al porto.\n🍽️ Ristoranti: Café sul mare con soba di Okinawa e pesce fresco.\n🏠 Alloggi: Guesthouse 'Kerama Blue', bungalow, campeggio a Tokashiku Beach.",
+                    ru: "🚲 Транспорт: Шатл от порта до пляжа Ахарен (¥400), аренда велосипедов/скутеров (¥1500/день). Такси.\n🏄 Прокат: Снаряжение для снорклинга, каяки.\n🍜 Местные магазины: Небольшой магазин у порта.\n🍽️ Рестораны: Кафе с местной лапшой и морепродуктами.\n🏠 Проживание: Гостевой дом, бунгало, кемпинг.",
+                    ja: "🚲 交通: 阿波連ビーチ行きシャトルバス（¥400）、レンタサイクル/スクーター（¥1500〜）。タクシーあり。\n🏄 レンタル: シュノーケル、カヤック、ビーチパラソル。\n🍜 地元のお店: 港近くの小さな商店。\n🍽️ 食堂: 海鮮丼、沖縄そばのお店。\n🏠 宿泊: ゲストハウス「ケラマブルー」、バンガロー、渡嘉志久ビーチキャンプ。"
+                },
+                officialUrl: "https://www.vill.tokashiki.okinawa.jp/" 
+            },
+            aka: {
+                id: "aka",
+                name_jp: "阿嘉島",
+                beaches: "Nishihama Beach",
+                imgPlaceholder: "https://placehold.co/800x400/2f6b47/white?text=Aka+Island+Nishihama",
+                details: {
+                    en: "🚲 Transportation: Rent a bicycle (¥1000/day) or walk; island is small. No buses.\n🏄 Rental shops: Snorkel & marine sports rental near Nishihama Beach.\n🍜 Local shops: 'Aka Market' for drinks & snacks, small souvenir shop.\n🍽️ Restaurants: 'Marine House' Okinawan cuisine, sunset cafe.\n🏠 Accommodation: minshuku 'Aka Island Guesthouse', seafront lodges.",
+                    it: "🚲 Trasporti: Noleggio biciclette (¥1000/giorno) o a piedi. L'isola è piccola.\n🏄 Noleggio: Snorkel e attrezzatura sportiva vicino a Nishihama Beach.\n🍜 Negozi: 'Aka Market' snack e souvenir.\n🍽️ Ristoranti: Cucina tradizionale, caffetteria al tramonto.\n🏠 Alloggi: Minshuku, lodge sul mare.",
+                    ru: "🚲 Транспорт: Аренда велосипеда (¥1000/день) или пешком. Остров небольшой.\n🏄 Прокат: Снорклинг и снаряжение возле пляжа Нишихама.\n🍜 Местные магазины: 'Aka Market', сувениры.\n🍽️ Рестораны: Окинавская кухня, кафе на закате.\n🏠 Проживание: Миншуку, гостевые дома у моря.",
+                    ja: "🚲 交通: レンタサイクル（¥1000/日）または徒歩。島はコンパクト。\n🏄 レンタル: 北浜ビーチ付近でシュノーケル・マリンスポーツレンタル。\n🍜 地元のお店: 「阿嘉マーケット」軽食＆お土産。\n🍽️ 食堂: 沖縄料理、サンセットカフェ。\n🏠 宿泊: 民宿「阿嘉島ゲストハウス」、海辺のロッジ。"
+                },
+                officialUrl: "https://www.akajima.jp/"
+            },
+            zamami: {
+                id: "zamami",
+                name_jp: "座間味島",
+                beaches: "Ama Beach, Furuzamami Beach",
+                imgPlaceholder: "https://placehold.co/800x400/2f6b47/white?text=Zamami+Island",
+                details: {
+                    en: "🚲 Transportation: Shuttle bus connecting port, Furuzamami & Ama Beach. E-bike rentals available (¥2000/day).\n🏄 Rental shops: Snorkel gear, stand-up paddle, beach chairs at both beaches.\n🍜 Local shops: Convenience-like local store near port (no konbini, but has necessities).\n🍽️ Restaurants: 'Zamami Shokudo' local fish, 'Cafe Kyanparu'.\n🏠 Accommodation: Hotel Kerama Miyahira, guesthouses, glamping options.",
+                    it: "🚲 Trasporti: Navetta per le spiagge Furuzamami e Ama, e-bike (¥2000/giorno).\n🏄 Noleggio: Snorkeling, SUP, attrezzatura spiaggia.\n🍜 Negozi: Negozio locale vicino al porto (generi di prima necessità).\n🍽️ Ristoranti: Pesce locale, caffetteria.\n🏠 Alloggi: Hotel Kerama Miyahira, guesthouse, glamping.",
+                    ru: "🚲 Транспорт: Шатл до пляжей Фурудзамами и Ама, аренда электровелосипедов (¥2000).\n🏄 Прокат: Снорклинг, SUP, пляжные принадлежности.\n🍜 Местные магазины: Магазин у порта (нет конбини, но есть всё необходимое).\n🍽️ Рестораны: Местная рыба, кафе.\n🏠 Проживание: Отель Kerama Miyahira, гостевые дома, глэмпинг.",
+                    ja: "🚲 交通: 古座間味・阿真ビーチ行きシャトルバス、電動レンタサイクル（¥2000/日）\n🏄 レンタル: シュノーケル、スタンドアップパドル、ビーチ用品。\n🍜 地元のお店: 港近くの商店（コンビニはありませんが日用雑貨あり）\n🍽️ 食堂: 地魚料理「座間味食堂」、カフェ「きゃんぱる」\n🏠 宿泊: ホテルケラマミヤヒラ、ゲストハウス、グランピング。"
+                },
+                officialUrl: "https://www.zamamitourism.com/"
+            }
+        };
+
+        let currentLang = localStorage.getItem("appLang") || "en";
+        let currentTheme = localStorage.getItem("appTheme") || "dark";
+        let currentView = "home"; // 'home' or 'detail'
+        let selectedIslandId = null;
+
+        function setTheme(theme) {
+            if (theme === "light") {
+                document.body.classList.add("light-mode");
+            } else {
+                document.body.classList.remove("light-mode");
+            }
+            currentTheme = theme;
+            localStorage.setItem("appTheme", theme);
+        }
+
+        function toggleTheme() {
+            setTheme(currentTheme === "dark" ? "light" : "dark");
+            render(); // re-render to refresh any theme-specific dynamic
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem("appLang", lang);
+            render();
+        }
+
+        function render() {
+            if (currentView === "home") renderHome();
+            else if (currentView === "detail" && selectedIslandId) renderDetail(selectedIslandId);
+        }
+
+        function navigateHome() {
+            currentView = "home";
+            selectedIslandId = null;
+            window.history.pushState({ view: "home" }, "", window.location.pathname);
+            render();
+        }
+
+        function navigateToDetail(islandId) {
+            currentView = "detail";
+            selectedIslandId = islandId;
+            window.history.pushState({ view: "detail", islandId }, "", window.location.pathname);
+            render();
+        }
+
+        function renderHome() {
+            const t = translations[currentLang];
+            const appRoot = document.getElementById("appRoot");
+            const islandEntries = [
+                { id: "tokashiki", name: "Tokashiki Island", jpname: "渡嘉敷島", beaches: "Aharen Beach, Tokashiku Beach", img: islandsData.tokashiki.imgPlaceholder },
+                { id: "aka", name: "Aka Island", jpname: "阿嘉島", beaches: "Nishihama Beach", img: islandsData.aka.imgPlaceholder },
+                { id: "zamami", name: "Zamami Island", jpname: "座間味島", beaches: "Ama Beach, Furuzamami Beach", img: islandsData.zamami.imgPlaceholder }
+            ];
+            const sponsorComment = t.sponsor_edit_comment || "// replace sponsor image & link //";
+            const html = `
+                <div class="app-header">
+                    <h1 class="title-gradient">${t.app_title}</h1>
+                    <div class="controls">
+                        ${["en","it","ru","ja"].map(lang => `<button class="${currentLang === lang ? 'active-lang' : ''}" data-lang="${lang}">${lang.toUpperCase()}</button>`).join('')}
+                        <button class="mode-toggle" id="darkmodeToggleBtn">${currentTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode'}</button>
+                    </div>
+                </div>
+                <div class="ferry-card" style="background:var(--card-bg); border-radius:1.5rem; padding:1rem; margin-bottom:1rem;">
+                    <p>✈️ ${t.ferry_info}</p>
+                    <p style="font-size:0.85rem; margin-top:0.5rem;">⏱️ ${t.ferry_schedule_note}</p>
+                </div>
+                <!-- SPONSOR SLOT (TOP) -->
+                <div class="sponsor-area" id="sponsorTop">
+                    <div class="sponsor-placeholder">
+                        <div class="sponsor-item">${t.sponsor_hint}</div>
+                        <!-- 後からイメージとURLを差し替え: 例 <a href="https://example.com"><img src="icons/sponsor.jpg" width="200"></a> -->
+                        <a href="#" style="color:var(--accent);">🏝️ ${sponsorComment}</a>
+                    </div>
+                </div>
+                <h2 style="margin: 1rem 0 0.5rem;">🏝️ ${t.to_islands}</h2>
+                <div class="island-grid" id="islandList">
+                    ${islandEntries.map(island => `
+                        <div class="island-card">
+                            <img class="card-img" src="${island.img}" alt="${island.name}" onerror="this.src='https://placehold.co/600x400/2f6b47/white?text=Island+Photo'">
+                            <div class="card-content">
+                                <div class="card-title">${island.name} (${island.jpname})</div>
+                                <div class="beach-list">🏖️ ${island.beaches}</div>
+                                <button class="detail-btn" data-id="${island.id}">🔍 View Details</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <!-- SPONSOR SLOT (BOTTOM) -->
+                <div class="sponsor-area" id="sponsorBottom">
+                    <div class="sponsor-placeholder">
+                        <div class="sponsor-item">📢 ${t.sponsor_hint}</div>
+                        <a href="#" style="color:var(--accent);">✨ ${sponsorComment}</a>
+                    </div>
+                </div>
+                <!-- 地図イメージ (後で差し替え) -->
+                <div class="map-placeholder" id="mapContainer">
+                    <img src="https://placehold.co/1200x240/3a6b5e/white?text=🗺️+KERAMA+ISLANDS+MAP+PLACEHOLDER+-+Replace+with+actual+map+image" alt="${t.map_alt}">
+                    <div style="font-size:0.7rem; padding:0.3rem;">※ 後で実際の地図イメージに差し替え可能</div>
+                </div>
+                <div class="footer">
+                    <p><strong>${t.contact}</strong><br><a href="mailto:mementomorikatsu@gmail.com">mementomorikatsu@gmail.com</a></p>
+                </div>
+            `;
+            appRoot.innerHTML = html;
+            // attach event listeners
+            document.querySelectorAll("[data-lang]").forEach(btn => {
+                btn.addEventListener("click", (e) => setLanguage(btn.getAttribute("data-lang")));
+            });
+            document.getElementById("darkmodeToggleBtn")?.addEventListener("click", toggleTheme);
+            document.querySelectorAll(".detail-btn").forEach(btn => {
+                btn.addEventListener("click", (e) => {
+                    const id = btn.getAttribute("data-id");
+                    if (id) navigateToDetail(id);
+                });
+            });
+            // sponsor & map edit comments appear ready (user can replace later)
+        }
+
+        function renderDetail(islandId) {
+            const island = islandsData[islandId];
+            if (!island) return navigateHome();
+            const t = translations[currentLang];
+            const detailText = island.details[currentLang] || island.details.en;
+            const islandNameDisplay = `${island.name_jp} / ${islandId.charAt(0).toUpperCase() + islandId.slice(1)} Island`;
+            const html = `
+                <div class="app-header">
+                    <h1 class="title-gradient">${t.app_title}</h1>
+                    <div class="controls">
+                        ${["en","it","ru","ja"].map(lang => `<button class="${currentLang === lang ? 'active-lang' : ''}" data-lang="${lang}">${lang.toUpperCase()}</button>`).join('')}
+                        <button class="mode-toggle" id="darkmodeToggleBtnDetail">${currentTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode'}</button>
+                    </div>
+                </div>
+                <div class="back-buttons">
+                    <button id="backToMainBtn">← ${t.back_home}</button>
+                    <button id="backHistoryBtn">↺ ${t.back_prev}</button>
+                </div>
+                <div class="detail-section">
+                    <img class="island-hero-img" src="${island.imgPlaceholder}" alt="${islandId}" onerror="this.src='https://placehold.co/800x400/2f6b47/white?text=Island+View'">
+                    <h2>🏝️ ${islandNameDisplay}</h2>
+                    <p><strong>🏖️ ${t.common_beaches}:</strong> ${island.beaches}</p>
+                    <div class="detail-text">
+                        <h3>🚲 ${t.transport_info}</h3>
+                        <p>${detailText.split('\n').filter(p => p.includes('Transportation') || p.includes('Trasporti') || p.includes('Транспорт') || p.includes('交通')).join('\n') || detailText}</p>
+                        <h3>🏄 ${t.shops_restaurants}</h3>
+                        <p>${detailText.split('\n').filter(p => p.includes('Rental') || p.includes('Noleggio')|| p.includes('レンタル')|| p.includes('shop')|| p.includes('お店')).join('\n') || detailText}</p>
+                        <h3>🏠 ${t.accommodations}</h3>
+                        <p>${detailText.split('\n').filter(p => p.includes('Accommodation')|| p.includes('Alloggi')|| p.includes('宿泊')|| p.includes('Проживание')).join('\n') || detailText}</p>
+                    </div>
+                    <a class="official-link" href="${island.officialUrl}" target="_blank" rel="noopener noreferrer">🔗 ${t.official_website}</a>
+                    <hr>
+                    <p style="font-size:0.9rem;">※ ${t.ferry_schedule_note}<br>※1. 天候に左右されます。晴れた日に行きましょう。<br>※2. コンビニはありませんが地元のお店あります。</p>
+                </div>
+                <div class="footer">
+                    <p><strong>${t.contact}</strong><br><a href="mailto:mementomorikatsu@gmail.com">mementomorikatsu@gmail.com</a></p>
+                </div>
+            `;
+            document.getElementById("appRoot").innerHTML = html;
+            document.querySelectorAll("[data-lang]").forEach(btn => {
+                btn.addEventListener("click", (e) => setLanguage(btn.getAttribute("data-lang")));
+            });
+            document.getElementById("darkmodeToggleBtnDetail")?.addEventListener("click", toggleTheme);
+            document.getElementById("backToMainBtn")?.addEventListener("click", navigateHome);
+            document.getElementById("backHistoryBtn")?.addEventListener("click", () => { window.history.back(); });
+        }
+
+        // Handle popstate (browser back)
+        window.addEventListener("popstate", (event) => {
+            const state = event.state;
+            if (state && state.view === "detail" && state.islandId) {
+                currentView = "detail";
+                selectedIslandId = state.islandId;
+                renderDetail(selectedIslandId);
+            } else {
+                currentView = "home";
+                selectedIslandId = null;
+                renderHome();
+            }
+        });
+
+        // initial load
+        setTheme(currentTheme);
+        renderHome();
+
+        // register service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    console.log('SW registered: ', reg);
+                }).catch(err => console.log('SW failed: ', err));
+            });
+        }
+    </script>
+</body>
+</html>
