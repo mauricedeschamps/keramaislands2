@@ -169,6 +169,7 @@
             font-weight: bold;
         }
 
+        /* スポンサーエリア - アイコンサイズに統一 */
         .sponsor-area {
             margin: 1.5rem 0;
             text-align: center;
@@ -176,24 +177,25 @@
 
         .sponsor-link {
             display: inline-block;
-            border-radius: 1rem;
-            overflow: hidden;
             transition: transform 0.2s ease, opacity 0.2s;
+            text-decoration: none;
         }
 
         .sponsor-link:hover {
-            transform: scale(1.02);
-            opacity: 0.95;
+            transform: scale(1.05);
+            opacity: 0.9;
         }
 
         .sponsor-img {
             display: block;
-            width: 100%;
-            max-width: 100%;
-            height: auto;
-            border-radius: 1rem;
+            width: 80px;          /* アイコンサイズ */
+            height: 80px;
+            border-radius: 50%;    /* 丸形アイコン風 */
+            object-fit: cover;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
+        /* 地図はフル幅・角丸 */
         .map-wrapper {
             margin: 2rem 0 1rem;
             border-radius: 1.5rem;
@@ -288,15 +290,15 @@
     </div>
     <script>
         // ========== 編集エリア（スポンサー画像・リンク・地図画像を自由に変更できます） ==========
-        // 上部スポンサー画像のパス（imagesフォルダ内の.pngを指定）
+        // 上部スポンサー画像のパス（imagesフォルダ内の画像を指定、アイコンサイズで表示）
         const sponsorTopImage = "images/sponsor_top.png";  // 例: "images/sponsor_top.png"
         // 上部スポンサーのリンク先URL（クリックで遷移）
-        const sponsorTopUrl = "https://myplace-guesthouse.com/ja/";  // 例: "https://example.com"
+        const sponsorTopUrl = "https://myplace-guesthouse.com/ja/";  // 実際のURLに置き換えてください
         
-        // 下部スポンサー画像のパス
-        const sponsorBottomImage = "images/myplace.png";  // 例: "images/sponsor_bottom.png"
-        // 下部スポンサーのリンク先URL
-        const sponsorBottomUrl = "#";  // 例: "https://example.com"
+        // 下部スポンサー画像のパス（アイコンサイズで表示）
+        const sponsorBottomImage = "images/myplace.png";  // ユーザー設定
+        // 下部スポンサーのリンク先URL（正しくリンクするよう修正済み）
+        const sponsorBottomUrl = "https://myplace-guesthouse.com/ja/";  // 実際のURLに置き換えてください
         
         // 地図画像のパス（imagesフォルダ内の画像を推奨）
         const mapImageUrl = "images/kerama_map.png";  // 例: "images/kerama_map.png"
@@ -460,16 +462,6 @@
             render();
         }
 
-        // 画像エラーハンドリング（存在しない場合フォールバック）
-        function handleSponsorImageError(imgElement, isTop) {
-            // スポンサー画像が無い場合は非表示にする（枠ごと消すことも可能だが、ここでは単に非表示）
-            imgElement.style.display = "none";
-        }
-
-        function handleMapImageError(imgElement) {
-            imgElement.src = defaultMapImage;
-        }
-
         function renderHome() {
             const t = translations[currentLang];
             const appRoot = document.getElementById("appRoot");
@@ -496,7 +488,11 @@
                     <p>✈️ ${t.ferry_info}</p>
                     <p style="font-size:0.85rem; margin-top:0.5rem;">⏱️ ${t.ferry_schedule_note}</p>
                 </div>
-                <!-- 上部スポンサー枠 (画像のみ・クリックでリンク) -->
+                <!-- ★ 地図をここに移動（交通案内の直後、島リストの前） -->
+                <div class="map-wrapper">
+                    <img class="map-img" src="${mapImageUrl}" alt="${t.map_alt}" onerror="this.src='${defaultMapImage}'">
+                </div>
+                <!-- 上部スポンサー枠（アイコンサイズ・丸形） -->
                 <div class="sponsor-area" id="sponsorTop">
                     <a href="${sponsorTopUrl}" target="_blank" rel="noopener noreferrer" class="sponsor-link">
                         <img class="sponsor-img" src="${sponsorTopImage}" alt="Sponsor" onerror="this.style.display='none'">
@@ -515,15 +511,11 @@
                         </div>
                     `).join('')}
                 </div>
-                <!-- 下部スポンサー枠 -->
+                <!-- 下部スポンサー枠（アイコンサイズ・丸形） -->
                 <div class="sponsor-area" id="sponsorBottom">
                     <a href="${sponsorBottomUrl}" target="_blank" rel="noopener noreferrer" class="sponsor-link">
                         <img class="sponsor-img" src="${sponsorBottomImage}" alt="Sponsor" onerror="this.style.display='none'">
                     </a>
-                </div>
-                <!-- 地図イメージ (説明文なし・四隅丸み) -->
-                <div class="map-wrapper">
-                    <img class="map-img" src="${mapImageUrl}" alt="${t.map_alt}" onerror="this.src='${defaultMapImage}'">
                 </div>
                 <div class="footer">
                     <p><strong>${t.contact}</strong><br><a href="mailto:mementomorikatsu@gmail.com">${t.email}</a></p>
