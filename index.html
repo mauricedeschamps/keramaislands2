@@ -203,8 +203,8 @@
 
         .map-placeholder img {
             width: 100%;
-            max-height: 220px;
-            object-fit: cover;
+            height: auto;  /* 高さを自動調整し、下部が切れないように */
+            object-fit: contain;
             display: block;
         }
 
@@ -290,7 +290,7 @@
         const translations = {
             en: {
                 app_title: "Kerama Islands Escape",
-                ferry_info: "⛴️ From Naha Airport → Tomari Port (15min taxi/monorail) → Ferry to Kerama Islands. High-speed boats (35-70min) & ferries. Check weather!",
+                ferry_info: "⛴️ From Naha Airport → Tomari Port (15min taxi / bus / monorail) → Ferry to Kerama Islands. High-speed boats (35-70min) & ferries. Check weather!",
                 sponsor_hint: "✨ Sponsor zone - replace image & URL below ✨",
                 to_islands: "Our Islands",
                 back_home: "← Back to Main",
@@ -308,7 +308,7 @@
             },
             it: {
                 app_title: "Fuga alle Isole Kerama",
-                ferry_info: "⛴️ Dall'aeroporto di Naha → Porto di Tomari (15min taxi/monorotaia) → Traghetto per le isole Kerama. Aliscafi (35-70min) e traghetti. Attenzione al meteo!",
+                ferry_info: "⛴️ Dall'aeroporto di Naha → Porto di Tomari (15min taxi / bus / monorotaia) → Traghetto per le isole Kerama. Aliscafi (35-70min) e traghetti. Attenzione al meteo!",
                 sponsor_hint: "✨ Sponsor - sostituisci immagine e URL ✨",
                 to_islands: "Le Nostre Isole",
                 back_home: "← Torna alla Home",
@@ -326,7 +326,7 @@
             },
             ru: {
                 app_title: "Острова Керама: Рай",
-                ferry_info: "⛴️ Из аэропорта Наха → Порт Томари (15 мин такси/монорельс) → Паром на острова Керама. Скоростные катера (35-70 мин) и паромы. Проверяйте погоду!",
+                ferry_info: "⛴️ Из аэропорта Наха → Порт Томари (15 мин такси / автобус / монорельс) → Паром на острова Керама. Скоростные катера (35-70 мин) и паромы. Проверяйте погоду!",
                 sponsor_hint: "✨ Спонсорская зона - замените изображение и URL ✨",
                 to_islands: "Наши острова",
                 back_home: "← На главную",
@@ -344,7 +344,7 @@
             },
             ja: {
                 app_title: "慶良間諸島 楽園ガイド",
-                ferry_info: "⛴️ 那覇空港→泊港（タクシー・モノレール約15分）→慶良間諸島へフェリー。高速船（35〜70分）・フェリー。晴れた日に出かけましょう！",
+                ferry_info: "⛴️ 那覇空港→泊港（タクシー・バス・モノレール約15分）→慶良間諸島へフェリー。高速船（35〜70分）・フェリー。晴れた日に出かけましょう！",
                 sponsor_hint: "✨ スポンサー枠 - 画像とURLは後ほど差し替え可能 ✨",
                 to_islands: "慶良間の島々",
                 back_home: "← メインページへ戻る",
@@ -459,11 +459,17 @@
                 { id: "zamami", name: "Zamami Island", jpname: "座間味島", beaches: "Ama Beach, Furuzamami Beach", img: islandsData.zamami.imgPlaceholder }
             ];
             const sponsorComment = t.sponsor_edit_comment || "// replace sponsor image & link //";
+            const langButtons = [
+                { code: "en", flag: "🇬🇧", label: "EN" },
+                { code: "it", flag: "🇮🇹", label: "IT" },
+                { code: "ru", flag: "🇷🇺", label: "RU" },
+                { code: "ja", flag: "🇯🇵", label: "JA" }
+            ];
             const html = `
                 <div class="app-header">
                     <h1 class="title-gradient">${t.app_title}</h1>
                     <div class="controls">
-                        ${["en","it","ru","ja"].map(lang => `<button class="${currentLang === lang ? 'active-lang' : ''}" data-lang="${lang}">${lang.toUpperCase()}</button>`).join('')}
+                        ${langButtons.map(lang => `<button class="${currentLang === lang.code ? 'active-lang' : ''}" data-lang="${lang.code}">${lang.flag} ${lang.label}</button>`).join('')}
                         <button class="mode-toggle" id="darkmodeToggleBtn">${currentTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode'}</button>
                     </div>
                 </div>
@@ -502,7 +508,8 @@
                 <!-- 地図イメージ (後で差し替え) -->
                 <div class="map-placeholder" id="mapContainer">
                     <img src="https://www.forsomethingmore.com/wp-content/uploads/2017/06/route_map_okinawa.jpg" alt="${t.map_alt}">
-                   
+                    <div style="font-size:0.7rem; padding:0.3rem;">※ 後で実際の地図イメージに差し替え可能</div>
+                </div>
                 <div class="footer">
                     <p><strong>${t.contact}</strong><br><a href="mailto:mementomorikatsu@gmail.com">mementomorikatsu@gmail.com</a></p>
                 </div>
@@ -528,11 +535,17 @@
             const t = translations[currentLang];
             const detailText = island.details[currentLang] || island.details.en;
             const islandNameDisplay = `${island.name_jp} / ${islandId.charAt(0).toUpperCase() + islandId.slice(1)} Island`;
+            const langButtons = [
+                { code: "en", flag: "🇬🇧", label: "EN" },
+                { code: "it", flag: "🇮🇹", label: "IT" },
+                { code: "ru", flag: "🇷🇺", label: "RU" },
+                { code: "ja", flag: "🇯🇵", label: "JA" }
+            ];
             const html = `
                 <div class="app-header">
                     <h1 class="title-gradient">${t.app_title}</h1>
                     <div class="controls">
-                        ${["en","it","ru","ja"].map(lang => `<button class="${currentLang === lang ? 'active-lang' : ''}" data-lang="${lang}">${lang.toUpperCase()}</button>`).join('')}
+                        ${langButtons.map(lang => `<button class="${currentLang === lang.code ? 'active-lang' : ''}" data-lang="${lang.code}">${lang.flag} ${lang.label}</button>`).join('')}
                         <button class="mode-toggle" id="darkmodeToggleBtnDetail">${currentTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode'}</button>
                     </div>
                 </div>
