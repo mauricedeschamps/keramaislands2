@@ -188,11 +188,29 @@
 
         .sponsor-img {
             display: block;
-            width: 80px;          /* アイコンサイズ */
+            width: 80px;
             height: 80px;
-            border-radius: 50%;    /* 丸形アイコン風 */
+            border-radius: 50%;
             object-fit: cover;
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        /* 追加：座間味島の下に表示する特別なマップ画像スタイル */
+        .extra-map-wrapper {
+            margin: 0.5rem 0 0.8rem;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            background: var(--bg-surface);
+            line-height: 0;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+        .extra-map-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 1.5rem;
+            transition: transform 0.2s ease;
         }
 
         /* 地図はフル幅・角丸 */
@@ -291,7 +309,6 @@
     <script>
         // ========== 編集エリア（スポンサー画像・リンク・地図画像を自由に変更できます） ==========
         // 上部スポンサー画像のパス（imagesフォルダ内の画像を指定、アイコンサイズで表示）
-        // 【修正】スペースがあっても動作するようエンコード処理を追加（ファイル名にスペースがある場合はリネームを推奨）
         const sponsorTopImage = "images/visitokinawajapan.jpeg";  // 例: "images/sponsor_top.png"
         // 上部スポンサーのリンク先URL（クリックで遷移）
         const sponsorTopUrl = "https://visitokinawajapan.com/destinations/kerama-islands/";
@@ -307,6 +324,11 @@
         const defaultMapImage = "https://www.forsomethingmore.com/wp-content/uploads/2017/06/route_map_okinawa.jpg";
         // スポンサー画像のデフォルトプレースホルダー（画像が無い場合に表示）
         const defaultSponsorImage = "https://placehold.co/200x200/ffb347/ffffff?text=Sponsor";
+
+        // ⭐ 追加: 座間味島と下部スポンサーの間に挿入する特別な画像 (リクエスト: images/map.png)
+        const extraMapImageUrl = "images/map.png";
+        // 追加画像のフォールバック（万が一画像がない場合）
+        const defaultExtraMapImage = "https://placehold.co/1200x400/2a5f5f/white?text=Kerama+Special+Map";
         // ========================================================================
 
         // ----------------------------- MULTI-LANG DATA ---------------------------------
@@ -325,7 +347,8 @@
                 transport_info: "Transportation & Rental",
                 shops_restaurants: "Local Shops & Eateries",
                 accommodations: "Accommodations",
-                official_website: "Official Website"
+                official_website: "Official Website",
+                extra_map_caption: "📍 Snorkeling & Beach Map"
             },
             it: {
                 app_title: "Fuga alle Isole Kerama",
@@ -341,7 +364,8 @@
                 transport_info: "Trasporti e Noleggi",
                 shops_restaurants: "Negozi locali e Ristoranti",
                 accommodations: "Alloggi",
-                official_website: "Sito Ufficiale"
+                official_website: "Sito Ufficiale",
+                extra_map_caption: "📍 Mappa per Snorkeling & Spiagge"
             },
             ru: {
                 app_title: "Острова Керама: Рай",
@@ -357,7 +381,8 @@
                 transport_info: "Транспорт и аренда",
                 shops_restaurants: "Местные магазины и кафе",
                 accommodations: "Проживание",
-                official_website: "Официальный сайт"
+                official_website: "Официальный сайт",
+                extra_map_caption: "📍 Карта снорклинга и пляжей"
             },
             ja: {
                 app_title: "慶良間諸島 楽園ガイド",
@@ -373,7 +398,8 @@
                 transport_info: "島内交通・レンタル",
                 shops_restaurants: "お店・食堂",
                 accommodations: "宿泊施設",
-                official_website: "公式サイト"
+                official_website: "公式サイト",
+                extra_map_caption: "📍 シュノーケリング＆ビーチマップ"
             }
         };
 
@@ -449,12 +475,10 @@
         // 画像の安全なURL生成（エンコード＋フォールバック）
         function getSafeImageUrl(originalPath, defaultPath = defaultSponsorImage) {
             if (!originalPath) return defaultPath;
-            // すでにhttpで始まる外部URLはそのまま（エンコードしない）
             if (originalPath.startsWith('http://') || originalPath.startsWith('https://')) {
                 return originalPath;
             }
             try {
-                // 相対パスもエンコード（ただしスラッシュは保持）
                 const parts = originalPath.split('/');
                 const encodedParts = parts.map(part => encodeURIComponent(part));
                 return encodedParts.join('/');
@@ -497,10 +521,35 @@
                 { code: "ja", flag: "🇯🇵", label: "JA" }
             ];
             
-            // 画像URLを安全に処理
             const safeMapUrl = getSafeImageUrl(mapImageUrl, defaultMapImage);
             const safeSponsorTopImg = getSafeImageUrl(sponsorTopImage);
             const safeSponsorBottomImg = getSafeImageUrl(sponsorBottomImage);
+            const safeExtraMapImg = getSafeImageUrl(extraMapImageUrl, defaultExtraMapImage);
+            
+            // 島のカード＋座間味島の直後に特別なマップ画像を挿入するためにHTMLを組み立て
+            let islandsHtmlArray = [];
+            islandEntries.forEach((island, idx) => {
+                // 島カード
+                islandsHtmlArray.push(`
+                    <div class="island-card">
+                        <img class="card-img" src="${island.img}" alt="${island.name}" onerror="this.src='https://placehold.co/600x400/2f6b47/white?text=Island+Photo'">
+                        <div class="card-content">
+                            <div class="card-title">${island.name} (${island.jpname})</div>
+                            <div class="beach-list">🏖️ ${island.beaches}</div>
+                            <button class="detail-btn" data-id="${island.id}">🔍 View Details</button>
+                        </div>
+                    </div>
+                `);
+                // 🔽 座間味島のカードが出力された直後に、特別なマップ画像を追加（リクエスト: images/map.png）
+                if (island.id === "zamami") {
+                    islandsHtmlArray.push(`
+                        <div class="extra-map-wrapper">
+                            <img class="extra-map-img" src="${safeExtraMapImg}" alt="${t.extra_map_caption || 'Additional Kerama Map'}" 
+                                 onerror="this.src='${defaultExtraMapImage}'; this.onerror=null;">
+                        </div>
+                    `);
+                }
+            });
             
             const html = `
                 <div class="app-header">
@@ -514,11 +563,11 @@
                     <p>✈️ ${t.ferry_info}</p>
                     <p style="font-size:0.85rem; margin-top:0.5rem;">⏱️ ${t.ferry_schedule_note}</p>
                 </div>
-                <!-- ★ 地図をここに移動（交通案内の直後、島リストの前） -->
+                <!-- メイン地図（既存） -->
                 <div class="map-wrapper">
                     <img class="map-img" src="${safeMapUrl}" alt="${t.map_alt}" onerror="this.src='${defaultMapImage}'">
                 </div>
-                <!-- 上部スポンサー枠（アイコンサイズ・丸形） -->
+                <!-- 上部スポンサー枠 -->
                 <div class="sponsor-area" id="sponsorTop">
                     <a href="${sponsorTopUrl}" target="_blank" rel="noopener noreferrer" class="sponsor-link">
                         <img class="sponsor-img" src="${safeSponsorTopImg}" alt="Sponsor" onerror="this.src='${defaultSponsorImage}'; this.onerror=null;">
@@ -526,16 +575,7 @@
                 </div>
                 <h2 style="margin: 1rem 0 0.5rem;">🏝️ ${t.to_islands}</h2>
                 <div class="island-grid" id="islandList">
-                    ${islandEntries.map(island => `
-                        <div class="island-card">
-                            <img class="card-img" src="${island.img}" alt="${island.name}" onerror="this.src='https://placehold.co/600x400/2f6b47/white?text=Island+Photo'">
-                            <div class="card-content">
-                                <div class="card-title">${island.name} (${island.jpname})</div>
-                                <div class="beach-list">🏖️ ${island.beaches}</div>
-                                <button class="detail-btn" data-id="${island.id}">🔍 View Details</button>
-                            </div>
-                        </div>
-                    `).join('')}
+                    ${islandsHtmlArray.join('')}
                 </div>
                 <!-- 下部スポンサー枠（アイコンサイズ・丸形） -->
                 <div class="sponsor-area" id="sponsorBottom">
