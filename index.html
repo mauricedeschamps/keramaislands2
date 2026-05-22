@@ -170,42 +170,43 @@
         }
 
         .sponsor-area {
-            background: var(--bg-surface);
-            border-radius: 1.5rem;
-            padding: 1rem;
-            text-align: center;
-            border: 1px dashed var(--accent);
             margin: 1.5rem 0;
-        }
-
-        .sponsor-placeholder {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .sponsor-item {
-            background: rgba(255,180,80,0.1);
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            font-size: 0.8rem;
-        }
-
-        .map-placeholder {
-            margin: 2rem 0 1rem;
             text-align: center;
-            border-radius: 2rem;
+        }
+
+        .sponsor-link {
+            display: inline-block;
+            border-radius: 1rem;
+            overflow: hidden;
+            transition: transform 0.2s ease, opacity 0.2s;
+        }
+
+        .sponsor-link:hover {
+            transform: scale(1.02);
+            opacity: 0.95;
+        }
+
+        .sponsor-img {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            border-radius: 1rem;
+        }
+
+        .map-wrapper {
+            margin: 2rem 0 1rem;
+            border-radius: 1.5rem;
             overflow: hidden;
             background: var(--bg-surface);
+            line-height: 0;
         }
 
-        .map-placeholder img {
+        .map-img {
             width: 100%;
-            height: auto;  /* 高さを自動調整し、下部が切れないように */
-            object-fit: contain;
+            height: auto;
             display: block;
+            border-radius: 1.5rem;
         }
 
         .footer {
@@ -286,79 +287,88 @@
         <!-- dynamic content will be rendered here -->
     </div>
     <script>
+        // ========== 編集エリア（スポンサー画像・リンク・地図画像を自由に変更できます） ==========
+        // 上部スポンサー画像のパス（imagesフォルダ内の.pngを指定）
+        const sponsorTopImage = "images/sponsor_top.png";  // 例: "images/sponsor_top.png"
+        // 上部スポンサーのリンク先URL（クリックで遷移）
+        const sponsorTopUrl = "#";  // 例: "https://example.com"
+        
+        // 下部スポンサー画像のパス
+        const sponsorBottomImage = "images/sponsor_bottom.png";  // 例: "images/sponsor_bottom.png"
+        // 下部スポンサーのリンク先URL
+        const sponsorBottomUrl = "#";  // 例: "https://example.com"
+        
+        // 地図画像のパス（imagesフォルダ内の画像を推奨）
+        const mapImageUrl = "images/kerama_map.png";  // 例: "images/kerama_map.png"
+        // 画像が存在しない場合のフォールバック（デフォルトの地図イメージ）
+        const defaultMapImage = "https://www.forsomethingmore.com/wp-content/uploads/2017/06/route_map_okinawa.jpg";
+        // ========================================================================
+
         // ----------------------------- MULTI-LANG DATA ---------------------------------
         const translations = {
             en: {
                 app_title: "Kerama Islands Escape",
                 ferry_info: "⛴️ From Naha Airport → Tomari Port (15min taxi / bus / monorail) → Ferry to Kerama Islands. High-speed boats (35-70min) & ferries. Check weather!",
-                sponsor_hint: "✨ Sponsor zone - replace image & URL below ✨",
                 to_islands: "Our Islands",
                 back_home: "← Back to Main",
                 back_prev: "← Previous / Home",
                 contact: "Contact us",
                 email: "mementomorikatsu@gmail.com",
-                map_alt: "Kerama Islands Map (replace with actual map)",
+                map_alt: "Kerama Islands Map",
                 ferry_schedule_note: "Ferries from Tomari Port: Tokashiki (70min), Zamami/Aka (50min). Timetable varies, confirm on sunny days.",
                 common_beaches: "Beaches",
                 transport_info: "Transportation & Rental",
                 shops_restaurants: "Local Shops & Eateries",
                 accommodations: "Accommodations",
-                official_website: "Official Website",
-                sponsor_edit_comment: "// Replace sponsor image & link below //"
+                official_website: "Official Website"
             },
             it: {
                 app_title: "Fuga alle Isole Kerama",
                 ferry_info: "⛴️ Dall'aeroporto di Naha → Porto di Tomari (15min taxi / bus / monorotaia) → Traghetto per le isole Kerama. Aliscafi (35-70min) e traghetti. Attenzione al meteo!",
-                sponsor_hint: "✨ Sponsor - sostituisci immagine e URL ✨",
                 to_islands: "Le Nostre Isole",
                 back_home: "← Torna alla Home",
                 back_prev: "← Indietro / Home",
                 contact: "Contattaci",
                 email: "mementomorikatsu@gmail.com",
-                map_alt: "Mappa delle Isole Kerama (sostituire con mappa reale)",
+                map_alt: "Mappa delle Isole Kerama",
                 ferry_schedule_note: "Traghetti da Tomari Port: Tokashiki (70min), Zamami/Aka (50min). Orari variabili, assicurati di andare in una giornata di sole.",
                 common_beaches: "Spiagge",
                 transport_info: "Trasporti e Noleggi",
                 shops_restaurants: "Negozi locali e Ristoranti",
                 accommodations: "Alloggi",
-                official_website: "Sito Ufficiale",
-                sponsor_edit_comment: "// Sostituisci immagine sponsor e link sotto //"
+                official_website: "Sito Ufficiale"
             },
             ru: {
                 app_title: "Острова Керама: Рай",
                 ferry_info: "⛴️ Из аэропорта Наха → Порт Томари (15 мин такси / автобус / монорельс) → Паром на острова Керама. Скоростные катера (35-70 мин) и паромы. Проверяйте погоду!",
-                sponsor_hint: "✨ Спонсорская зона - замените изображение и URL ✨",
                 to_islands: "Наши острова",
                 back_home: "← На главную",
                 back_prev: "← Назад / Главная",
                 contact: "Связаться с нами",
                 email: "mementomorikatsu@gmail.com",
-                map_alt: "Карта островов Керама (замените на реальную карту)",
+                map_alt: "Карта островов Керама",
                 ferry_schedule_note: "Паромы из порта Томари: Токашики (70 мин), Дзамами/Ака (50 мин). Расписание меняется, езжайте в солнечный день.",
                 common_beaches: "Пляжи",
                 transport_info: "Транспорт и аренда",
                 shops_restaurants: "Местные магазины и кафе",
                 accommodations: "Проживание",
-                official_website: "Официальный сайт",
-                sponsor_edit_comment: "// Замените изображение спонсора и ссылку ниже //"
+                official_website: "Официальный сайт"
             },
             ja: {
                 app_title: "慶良間諸島 楽園ガイド",
                 ferry_info: "⛴️ 那覇空港→泊港（タクシー・バス・モノレール約15分）→慶良間諸島へフェリー。高速船（35〜70分）・フェリー。晴れた日に出かけましょう！",
-                sponsor_hint: "✨ スポンサー枠 - 画像とURLは後ほど差し替え可能 ✨",
                 to_islands: "慶良間の島々",
                 back_home: "← メインページへ戻る",
                 back_prev: "← 戻る / ホーム",
                 contact: "お問い合わせ",
                 email: "mementomorikatsu@gmail.com",
-                map_alt: "慶良間諸島マップ（後でイメージ追加）",
+                map_alt: "慶良間諸島マップ",
                 ferry_schedule_note: "泊港発: 渡嘉敷島（70分）、座間味・阿嘉（50分）。天候により変動。",
                 common_beaches: "ビーチ",
                 transport_info: "島内交通・レンタル",
                 shops_restaurants: "お店・食堂",
                 accommodations: "宿泊施設",
-                official_website: "公式サイト",
-                sponsor_edit_comment: "// スポンサー画像とリンクをここに差し替え //"
+                official_website: "公式サイト"
             }
         };
 
@@ -407,7 +417,7 @@
 
         let currentLang = localStorage.getItem("appLang") || "en";
         let currentTheme = localStorage.getItem("appTheme") || "dark";
-        let currentView = "home"; // 'home' or 'detail'
+        let currentView = "home";
         let selectedIslandId = null;
 
         function setTheme(theme) {
@@ -422,7 +432,7 @@
 
         function toggleTheme() {
             setTheme(currentTheme === "dark" ? "light" : "dark");
-            render(); // re-render to refresh any theme-specific dynamic
+            render();
         }
 
         function setLanguage(lang) {
@@ -450,6 +460,16 @@
             render();
         }
 
+        // 画像エラーハンドリング（存在しない場合フォールバック）
+        function handleSponsorImageError(imgElement, isTop) {
+            // スポンサー画像が無い場合は非表示にする（枠ごと消すことも可能だが、ここでは単に非表示）
+            imgElement.style.display = "none";
+        }
+
+        function handleMapImageError(imgElement) {
+            imgElement.src = defaultMapImage;
+        }
+
         function renderHome() {
             const t = translations[currentLang];
             const appRoot = document.getElementById("appRoot");
@@ -458,7 +478,6 @@
                 { id: "aka", name: "Aka Island", jpname: "阿嘉島", beaches: "Nishihama Beach", img: islandsData.aka.imgPlaceholder },
                 { id: "zamami", name: "Zamami Island", jpname: "座間味島", beaches: "Ama Beach, Furuzamami Beach", img: islandsData.zamami.imgPlaceholder }
             ];
-            const sponsorComment = t.sponsor_edit_comment || "// replace sponsor image & link //";
             const langButtons = [
                 { code: "en", flag: "🇬🇧", label: "EN" },
                 { code: "it", flag: "🇮🇹", label: "IT" },
@@ -477,13 +496,11 @@
                     <p>✈️ ${t.ferry_info}</p>
                     <p style="font-size:0.85rem; margin-top:0.5rem;">⏱️ ${t.ferry_schedule_note}</p>
                 </div>
-                <!-- SPONSOR SLOT (TOP) -->
+                <!-- 上部スポンサー枠 (画像のみ・クリックでリンク) -->
                 <div class="sponsor-area" id="sponsorTop">
-                    <div class="sponsor-placeholder">
-                        <div class="sponsor-item">${t.sponsor_hint}</div>
-                        <!-- 後からイメージとURLを差し替え: 例 <a href="https://example.com"><img src="icons/sponsor.jpg" width="200"></a> -->
-                        <a href="#" style="color:var(--accent);">🏝️ ${sponsorComment}</a>
-                    </div>
+                    <a href="${sponsorTopUrl}" target="_blank" rel="noopener noreferrer" class="sponsor-link">
+                        <img class="sponsor-img" src="${sponsorTopImage}" alt="Sponsor" onerror="this.style.display='none'">
+                    </a>
                 </div>
                 <h2 style="margin: 1rem 0 0.5rem;">🏝️ ${t.to_islands}</h2>
                 <div class="island-grid" id="islandList">
@@ -498,20 +515,18 @@
                         </div>
                     `).join('')}
                 </div>
-                <!-- SPONSOR SLOT (BOTTOM) -->
+                <!-- 下部スポンサー枠 -->
                 <div class="sponsor-area" id="sponsorBottom">
-                    <div class="sponsor-placeholder">
-                        <div class="sponsor-item">📢 ${t.sponsor_hint}</div>
-                        <a href="#" style="color:var(--accent);">✨ ${sponsorComment}</a>
-                    </div>
+                    <a href="${sponsorBottomUrl}" target="_blank" rel="noopener noreferrer" class="sponsor-link">
+                        <img class="sponsor-img" src="${sponsorBottomImage}" alt="Sponsor" onerror="this.style.display='none'">
+                    </a>
                 </div>
-                <!-- 地図イメージ (後で差し替え) -->
-                <div class="map-placeholder" id="mapContainer">
-                    <img src="https://www.forsomethingmore.com/wp-content/uploads/2017/06/route_map_okinawa.jpg" alt="${t.map_alt}">
-                    <div style="font-size:0.7rem; padding:0.3rem;">※ 後で実際の地図イメージに差し替え可能</div>
+                <!-- 地図イメージ (説明文なし・四隅丸み) -->
+                <div class="map-wrapper">
+                    <img class="map-img" src="${mapImageUrl}" alt="${t.map_alt}" onerror="this.src='${defaultMapImage}'">
                 </div>
                 <div class="footer">
-                    <p><strong>${t.contact}</strong><br><a href="mailto:mementomorikatsu@gmail.com">mementomorikatsu@gmail.com</a></p>
+                    <p><strong>${t.contact}</strong><br><a href="mailto:mementomorikatsu@gmail.com">${t.email}</a></p>
                 </div>
             `;
             appRoot.innerHTML = html;
@@ -526,7 +541,6 @@
                     if (id) navigateToDetail(id);
                 });
             });
-            // sponsor & map edit comments appear ready (user can replace later)
         }
 
         function renderDetail(islandId) {
@@ -570,7 +584,7 @@
                     <p style="font-size:0.9rem;">※ ${t.ferry_schedule_note}<br>※1. 天候に左右されます。晴れた日に行きましょう。<br>※2. コンビニはありませんが地元のお店あります。</p>
                 </div>
                 <div class="footer">
-                    <p><strong>${t.contact}</strong><br><a href="mailto:mementomorikatsu@gmail.com">mementomorikatsu@gmail.com</a></p>
+                    <p><strong>${t.contact}</strong><br><a href="mailto:mementomorikatsu@gmail.com">${t.email}</a></p>
                 </div>
             `;
             document.getElementById("appRoot").innerHTML = html;
@@ -582,7 +596,7 @@
             document.getElementById("backHistoryBtn")?.addEventListener("click", () => { window.history.back(); });
         }
 
-        // Handle popstate (browser back)
+        // Handle popstate
         window.addEventListener("popstate", (event) => {
             const state = event.state;
             if (state && state.view === "detail" && state.islandId) {
