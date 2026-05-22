@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#0a2f2a" media="(prefers-color-scheme: dark)">
-    <meta name="theme-color" content="#fef9e6" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0a2f2a" media="prefers-color-scheme: dark">
+    <meta name="theme-color" content="#fef9e6" media="prefers-color-scheme: light">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Kerama Islands">
@@ -291,19 +291,22 @@
     <script>
         // ========== 編集エリア（スポンサー画像・リンク・地図画像を自由に変更できます） ==========
         // 上部スポンサー画像のパス（imagesフォルダ内の画像を指定、アイコンサイズで表示）
+        // 【修正】スペースがあっても動作するようエンコード処理を追加（ファイル名にスペースがある場合はリネームを推奨）
         const sponsorTopImage = "images/visit Okinawa Japan.jpeg";  // 例: "images/sponsor_top.png"
         // 上部スポンサーのリンク先URL（クリックで遷移）
-        const sponsorTopUrl = "https://visitokinawajapan.com/destinations/kerama-islands/";  // 実際のURLに置き換えてください
+        const sponsorTopUrl = "https://visitokinawajapan.com/destinations/kerama-islands/";
         
         // 下部スポンサー画像のパス（アイコンサイズで表示）
-        const sponsorBottomImage = "images/myplace.png";  // ユーザー設定
+        const sponsorBottomImage = "images/myplace.png";
         // 下部スポンサーのリンク先URL（正しくリンクするよう修正済み）
-        const sponsorBottomUrl = "https://myplace-guesthouse.com/ja/";  // 実際のURLに置き換えてください
+        const sponsorBottomUrl = "https://myplace-guesthouse.com/ja/";
         
         // 地図画像のパス（imagesフォルダ内の画像を推奨）
-        const mapImageUrl = "images/kerama_map.png";  // 例: "images/kerama_map.png"
+        const mapImageUrl = "images/kerama_map.png";
         // 画像が存在しない場合のフォールバック（デフォルトの地図イメージ）
         const defaultMapImage = "https://www.forsomethingmore.com/wp-content/uploads/2017/06/route_map_okinawa.jpg";
+        // スポンサー画像のデフォルトプレースホルダー（画像が無い場合に表示）
+        const defaultSponsorImage = "https://placehold.co/200x200/ffb347/ffffff?text=Sponsor";
         // ========================================================================
 
         // ----------------------------- MULTI-LANG DATA ---------------------------------
@@ -443,6 +446,23 @@
             render();
         }
 
+        // 画像の安全なURL生成（エンコード＋フォールバック）
+        function getSafeImageUrl(originalPath, defaultPath = defaultSponsorImage) {
+            if (!originalPath) return defaultPath;
+            // すでにhttpで始まる外部URLはそのまま（エンコードしない）
+            if (originalPath.startsWith('http://') || originalPath.startsWith('https://')) {
+                return originalPath;
+            }
+            try {
+                // 相対パスもエンコード（ただしスラッシュは保持）
+                const parts = originalPath.split('/');
+                const encodedParts = parts.map(part => encodeURIComponent(part));
+                return encodedParts.join('/');
+            } catch(e) {
+                return defaultPath;
+            }
+        }
+
         function render() {
             if (currentView === "home") renderHome();
             else if (currentView === "detail" && selectedIslandId) renderDetail(selectedIslandId);
@@ -476,6 +496,12 @@
                 { code: "ru", flag: "🇷🇺", label: "RU" },
                 { code: "ja", flag: "🇯🇵", label: "JA" }
             ];
+            
+            // 画像URLを安全に処理
+            const safeMapUrl = getSafeImageUrl(mapImageUrl, defaultMapImage);
+            const safeSponsorTopImg = getSafeImageUrl(sponsorTopImage);
+            const safeSponsorBottomImg = getSafeImageUrl(sponsorBottomImage);
+            
             const html = `
                 <div class="app-header">
                     <h1 class="title-gradient">${t.app_title}</h1>
@@ -490,12 +516,12 @@
                 </div>
                 <!-- ★ 地図をここに移動（交通案内の直後、島リストの前） -->
                 <div class="map-wrapper">
-                    <img class="map-img" src="${mapImageUrl}" alt="${t.map_alt}" onerror="this.src='${defaultMapImage}'">
+                    <img class="map-img" src="${safeMapUrl}" alt="${t.map_alt}" onerror="this.src='${defaultMapImage}'">
                 </div>
                 <!-- 上部スポンサー枠（アイコンサイズ・丸形） -->
                 <div class="sponsor-area" id="sponsorTop">
                     <a href="${sponsorTopUrl}" target="_blank" rel="noopener noreferrer" class="sponsor-link">
-                        <img class="sponsor-img" src="${sponsorTopImage}" alt="Sponsor" onerror="this.style.display='none'">
+                        <img class="sponsor-img" src="${safeSponsorTopImg}" alt="Sponsor" onerror="this.src='${defaultSponsorImage}'; this.onerror=null;">
                     </a>
                 </div>
                 <h2 style="margin: 1rem 0 0.5rem;">🏝️ ${t.to_islands}</h2>
@@ -514,7 +540,7 @@
                 <!-- 下部スポンサー枠（アイコンサイズ・丸形） -->
                 <div class="sponsor-area" id="sponsorBottom">
                     <a href="${sponsorBottomUrl}" target="_blank" rel="noopener noreferrer" class="sponsor-link">
-                        <img class="sponsor-img" src="${sponsorBottomImage}" alt="Sponsor" onerror="this.style.display='none'">
+                        <img class="sponsor-img" src="${safeSponsorBottomImg}" alt="Sponsor" onerror="this.src='${defaultSponsorImage}'; this.onerror=null;">
                     </a>
                 </div>
                 <div class="footer">
