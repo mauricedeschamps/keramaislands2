@@ -292,6 +292,30 @@
             margin-bottom: 1rem;
         }
 
+        .ferry-card {
+            background: var(--card-bg);
+            border-radius: 1.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .ferry-item {
+            background: var(--bg-surface);
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--accent);
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .ferry-item:hover {
+            transform: translateX(5px);
+        }
+        .ferry-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
         @media (max-width: 480px) {
             .container {
                 padding: 1rem;
@@ -308,26 +332,14 @@
     </div>
     <script>
         // ========== 編集エリア（スポンサー画像・リンク・地図画像を自由に変更できます） ==========
-        // 上部スポンサー画像のパス（imagesフォルダ内の画像を指定、アイコンサイズで表示）
-        const sponsorTopImage = "images/visitokinawajapan.jpeg";  // 例: "images/sponsor_top.png"
-        // 上部スポンサーのリンク先URL（クリックで遷移）
+        const sponsorTopImage = "images/visitokinawajapan.jpeg";
         const sponsorTopUrl = "https://visitokinawajapan.com/destinations/kerama-islands/";
-        
-        // 下部スポンサー画像のパス（アイコンサイズで表示）
         const sponsorBottomImage = "images/myplace.png";
-        // 下部スポンサーのリンク先URL（正しくリンクするよう修正済み）
         const sponsorBottomUrl = "https://myplace-guesthouse.com/ja/";
-        
-        // 地図画像のパス（imagesフォルダ内の画像を推奨）
         const mapImageUrl = "images/kerama_map.png";
-        // 画像が存在しない場合のフォールバック（デフォルトの地図イメージ）
         const defaultMapImage = "https://www.forsomethingmore.com/wp-content/uploads/2017/06/route_map_okinawa.jpg";
-        // スポンサー画像のデフォルトプレースホルダー（画像が無い場合に表示）
         const defaultSponsorImage = "https://placehold.co/200x200/ffb347/ffffff?text=Sponsor";
-
-        // ⭐ 追加: 座間味島と下部スポンサーの間に挿入する特別な画像 (リクエスト: images/map.png)
         const extraMapImageUrl = "images/map.png";
-        // 追加画像のフォールバック（万が一画像がない場合）
         const defaultExtraMapImage = "https://placehold.co/1200x400/2a5f5f/white?text=Kerama+Special+Map";
         // ========================================================================
 
@@ -348,7 +360,18 @@
                 shops_restaurants: "Local Shops & Eateries",
                 accommodations: "Accommodations",
                 official_website: "Official Website",
-                extra_map_caption: "📍 Snorkeling & Beach Map"
+                extra_map_caption: "📍 Snorkeling & Beach Map",
+                inter_island_ferries: "🚢 Inter-Island Ferries",
+                zamami_aka_title: "Zamami ⇔ Aka (Mitsushima)",
+                kerama_route_title: "Kerama Route (Reservation required)",
+                zamami_aka_desc: "4 daily trips, no reservation needed for Zamami-Aka section",
+                kerama_route_desc: "Connects Zamami/Aka with Tokashiki (Aharen port). Reservation mandatory.",
+                back_to_list: "← Back to Ferry List",
+                schedule_summer: "Summer Schedule (Mar–Oct)",
+                schedule_winter: "Winter Schedule (Nov–Feb)",
+                fare_info: "Fare",
+                reservation_info: "Reservation & Contact",
+                official_website_zamami: "Zamami Village Official Website"
             },
             it: {
                 app_title: "Fuga alle Isole Kerama",
@@ -365,7 +388,18 @@
                 shops_restaurants: "Negozi locali e Ristoranti",
                 accommodations: "Alloggi",
                 official_website: "Sito Ufficiale",
-                extra_map_caption: "📍 Mappa per Snorkeling & Spiagge"
+                extra_map_caption: "📍 Mappa per Snorkeling & Spiagge",
+                inter_island_ferries: "🚢 Traghetti tra le isole",
+                zamami_aka_title: "Zamami ⇔ Aka (Mitsushima)",
+                kerama_route_title: "Rotta Kerama (prenotazione obbligatoria)",
+                zamami_aka_desc: "4 corse giornaliere, nessuna prenotazione per tratta Zamami-Aka",
+                kerama_route_desc: "Collega Zamami/Aka con Tokashiki (porto Aharen). Prenotazione obbligatoria.",
+                back_to_list: "← Torna all'elenco traghetti",
+                schedule_summer: "Orario estivo (Mar–Ott)",
+                schedule_winter: "Orario invernale (Nov–Feb)",
+                fare_info: "Tariffa",
+                reservation_info: "Prenotazione e contatti",
+                official_website_zamami: "Sito ufficiale del villaggio di Zamami"
             },
             ru: {
                 app_title: "Острова Керама: Рай",
@@ -382,7 +416,18 @@
                 shops_restaurants: "Местные магазины и кафе",
                 accommodations: "Проживание",
                 official_website: "Официальный сайт",
-                extra_map_caption: "📍 Карта снорклинга и пляжей"
+                extra_map_caption: "📍 Карта снорклинга и пляжей",
+                inter_island_ferries: "🚢 Межостровные паромы",
+                zamami_aka_title: "Дзамами ⇔ Ака (Мицусима)",
+                kerama_route_title: "Маршрут Керама (обязательное бронирование)",
+                zamami_aka_desc: "4 рейса в день, бронирование не требуется",
+                kerama_route_desc: "Соединяет Дзамами/Ака с Токашики (порт Ахарен). Бронирование обязательно.",
+                back_to_list: "← Назад к списку паромов",
+                schedule_summer: "Летнее расписание (март–окт)",
+                schedule_winter: "Зимнее расписание (ноя–фев)",
+                fare_info: "Стоимость",
+                reservation_info: "Бронирование и контакты",
+                official_website_zamami: "Официальный сайт деревни Дзамами"
             },
             ja: {
                 app_title: "慶良間諸島 楽園ガイド",
@@ -399,11 +444,22 @@
                 shops_restaurants: "お店・食堂",
                 accommodations: "宿泊施設",
                 official_website: "公式サイト",
-                extra_map_caption: "📍 シュノーケリング＆ビーチマップ"
+                extra_map_caption: "📍 シュノーケリング＆ビーチマップ",
+                inter_island_ferries: "🚢 3島間の移動",
+                zamami_aka_title: "座間味島 ⇔ 阿嘉島（みつしま）",
+                kerama_route_title: "ケラマ航路（予約制）",
+                zamami_aka_desc: "1日4便運航。座間味－阿嘉間は予約不要",
+                kerama_route_desc: "座間味・阿嘉と渡嘉敷島（阿波連港）を結ぶ。要予約",
+                back_to_list: "← 航路一覧へ戻る",
+                schedule_summer: "夏季ダイヤ（3月～10月）",
+                schedule_winter: "冬季ダイヤ（11月～2月）",
+                fare_info: "運賃",
+                reservation_info: "予約方法・連絡先",
+                official_website_zamami: "座間味村公式ホームページ"
             }
         };
 
-        // Island data (detailed descriptions per lang)
+        // Island data (existing)
         const islandsData = {
             tokashiki: {
                 id: "tokashiki",
@@ -446,17 +502,42 @@
             }
         };
 
+        // ----- 航路データ（追加）-----
+        const ferryData = {
+            zamami_aka: {
+                titleKey: "zamami_aka_title",
+                descKey: "zamami_aka_desc",
+                timetable: {
+                    summer: "【夏季（3月～10月）】\n1便: 座間味 7:45 → 阿嘉 8:00\n2便: 座間味 11:45 → 阿嘉 12:00\n3便: 座間味 14:30 → 阿嘉 14:45\n4便: 座間味 17:30 → 阿嘉 17:45\n※阿嘉発は到着後すぐ折り返し（時刻はほぼ同じ）",
+                    winter: "【冬季（11月～2月）】\n1便: 座間味 7:45 → 阿嘉 8:00\n2便: 座間味 11:45 → 阿嘉 12:00\n3便: 座間味 14:30 → 阿嘉 14:45\n4便: 座間味 17:20 → 阿嘉 17:35"
+                },
+                fare: "座間味港 ⇔ 阿嘉港: 大人500円 / 子供250円（片道）※環境協力税別途100円",
+                reservation: "座間味～阿嘉区間は予約不要。そのまま窓口で乗船券購入。\n阿波連港（渡嘉敷島）行きは要予約（098-987-2614）",
+                officialUrl: "https://www.vill.zamami.okinawa.jp/sempaku/mitsushima/"
+            },
+            kerama_route: {
+                titleKey: "kerama_route_title",
+                descKey: "kerama_route_desc",
+                timetable: {
+                    summer: "【運行例】要予約のオンデマンド運航\n座間味発 8:30 → 阿嘉発 8:45 → 阿波連着 9:05\n阿波連発 9:05 → 阿嘉着 9:25 → 座間味着 9:40\n\n座間味発 15:30 → 阿嘉発 15:45 → 阿波連着 16:05\n阿波連発 16:05 → 阿嘉着 16:25 → 座間味着 16:40",
+                    winter: "冬季もほぼ同じ時刻で運行（要確認）。前日17:00までの予約が必要。"
+                },
+                fare: "渡嘉敷島（阿波連港）～座間味島・阿嘉島間: 片道 約800円（予約時要確認）",
+                reservation: "完全予約制（予約がない場合は運航しません）\n予約先: 座間味村役場 船舶・観光課 TEL: 098-987-2614\n受付時間: 8:30～17:00（利用希望日の前日17:00まで）",
+                officialUrl: "https://www.vill.zamami.okinawa.jp/sempaku/"
+            }
+        };
+
+        // Global state
         let currentLang = localStorage.getItem("appLang") || "en";
         let currentTheme = localStorage.getItem("appTheme") || "dark";
-        let currentView = "home";
+        let currentView = "home";            // home, island_detail, ferry_list, ferry_detail
         let selectedIslandId = null;
+        let selectedFerryId = null;           // zamami_aka or kerama_route
 
         function setTheme(theme) {
-            if (theme === "light") {
-                document.body.classList.add("light-mode");
-            } else {
-                document.body.classList.remove("light-mode");
-            }
+            if (theme === "light") document.body.classList.add("light-mode");
+            else document.body.classList.remove("light-mode");
             currentTheme = theme;
             localStorage.setItem("appTheme", theme);
         }
@@ -472,12 +553,9 @@
             render();
         }
 
-        // 画像の安全なURL生成（エンコード＋フォールバック）
         function getSafeImageUrl(originalPath, defaultPath = defaultSponsorImage) {
             if (!originalPath) return defaultPath;
-            if (originalPath.startsWith('http://') || originalPath.startsWith('https://')) {
-                return originalPath;
-            }
+            if (originalPath.startsWith('http://') || originalPath.startsWith('https://')) return originalPath;
             try {
                 const parts = originalPath.split('/');
                 const encodedParts = parts.map(part => encodeURIComponent(part));
@@ -487,28 +565,47 @@
             }
         }
 
-        function render() {
-            if (currentView === "home") renderHome();
-            else if (currentView === "detail" && selectedIslandId) renderDetail(selectedIslandId);
-        }
-
+        // Navigation
         function navigateHome() {
             currentView = "home";
             selectedIslandId = null;
+            selectedFerryId = null;
             window.history.pushState({ view: "home" }, "", window.location.pathname);
             render();
         }
 
-        function navigateToDetail(islandId) {
-            currentView = "detail";
+        function navigateToIslandDetail(islandId) {
+            currentView = "island_detail";
             selectedIslandId = islandId;
-            window.history.pushState({ view: "detail", islandId }, "", window.location.pathname);
+            window.history.pushState({ view: "island_detail", islandId }, "", window.location.pathname);
             render();
         }
 
+        function navigateToFerryList() {
+            currentView = "ferry_list";
+            selectedFerryId = null;
+            window.history.pushState({ view: "ferry_list" }, "", window.location.pathname);
+            render();
+        }
+
+        function navigateToFerryDetail(ferryId) {
+            currentView = "ferry_detail";
+            selectedFerryId = ferryId;
+            window.history.pushState({ view: "ferry_detail", ferryId }, "", window.location.pathname);
+            render();
+        }
+
+        function render() {
+            if (currentView === "home") renderHome();
+            else if (currentView === "island_detail" && selectedIslandId) renderIslandDetail(selectedIslandId);
+            else if (currentView === "ferry_list") renderFerryList();
+            else if (currentView === "ferry_detail" && selectedFerryId) renderFerryDetail(selectedFerryId);
+            else renderHome();
+        }
+
+        // ---------- メインページ（3島＋新セクション）----------
         function renderHome() {
             const t = translations[currentLang];
-            const appRoot = document.getElementById("appRoot");
             const islandEntries = [
                 { id: "tokashiki", name: "Tokashiki Island", jpname: "渡嘉敷島", beaches: "Aharen Beach, Tokashiku Beach", img: islandsData.tokashiki.imgPlaceholder },
                 { id: "aka", name: "Aka Island", jpname: "阿嘉島", beaches: "Nishihama Beach", img: islandsData.aka.imgPlaceholder },
@@ -520,16 +617,13 @@
                 { code: "ru", flag: "🇷🇺", label: "RU" },
                 { code: "ja", flag: "🇯🇵", label: "JA" }
             ];
-            
             const safeMapUrl = getSafeImageUrl(mapImageUrl, defaultMapImage);
             const safeSponsorTopImg = getSafeImageUrl(sponsorTopImage);
             const safeSponsorBottomImg = getSafeImageUrl(sponsorBottomImage);
             const safeExtraMapImg = getSafeImageUrl(extraMapImageUrl, defaultExtraMapImage);
-            
-            // 島のカード＋座間味島の直後に特別なマップ画像を挿入するためにHTMLを組み立て
+
             let islandsHtmlArray = [];
             islandEntries.forEach((island, idx) => {
-                // 島カード
                 islandsHtmlArray.push(`
                     <div class="island-card">
                         <img class="card-img" src="${island.img}" alt="${island.name}" onerror="this.src='https://placehold.co/600x400/2f6b47/white?text=Island+Photo'">
@@ -540,7 +634,6 @@
                         </div>
                     </div>
                 `);
-                // 🔽 座間味島のカードが出力された直後に、特別なマップ画像を追加（リクエスト: images/map.png）
                 if (island.id === "zamami") {
                     islandsHtmlArray.push(`
                         <div class="extra-map-wrapper">
@@ -550,7 +643,7 @@
                     `);
                 }
             });
-            
+
             const html = `
                 <div class="app-header">
                     <h1 class="title-gradient">${t.app_title}</h1>
@@ -559,16 +652,14 @@
                         <button class="mode-toggle" id="darkmodeToggleBtn">${currentTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode'}</button>
                     </div>
                 </div>
-                <div class="ferry-card" style="background:var(--card-bg); border-radius:1.5rem; padding:1rem; margin-bottom:1rem;">
+                <div class="ferry-card">
                     <p>✈️ ${t.ferry_info}</p>
                     <p style="font-size:0.85rem; margin-top:0.5rem;">⏱️ ${t.ferry_schedule_note}</p>
                 </div>
-                <!-- メイン地図（既存） -->
                 <div class="map-wrapper">
                     <img class="map-img" src="${safeMapUrl}" alt="${t.map_alt}" onerror="this.src='${defaultMapImage}'">
                 </div>
-                <!-- 上部スポンサー枠 -->
-                <div class="sponsor-area" id="sponsorTop">
+                <div class="sponsor-area">
                     <a href="${sponsorTopUrl}" target="_blank" rel="noopener noreferrer" class="sponsor-link">
                         <img class="sponsor-img" src="${safeSponsorTopImg}" alt="Sponsor" onerror="this.src='${defaultSponsorImage}'; this.onerror=null;">
                     </a>
@@ -577,8 +668,11 @@
                 <div class="island-grid" id="islandList">
                     ${islandsHtmlArray.join('')}
                 </div>
-                <!-- 下部スポンサー枠（アイコンサイズ・丸形） -->
-                <div class="sponsor-area" id="sponsorBottom">
+                <!-- 追加: 3島間の移動ボタン -->
+                <div style="text-align: center; margin: 1rem 0 1.5rem;">
+                    <button id="interIslandBtn" style="background: var(--accent); color: #1e2a2a; font-size: 1.2rem; padding: 0.7rem 1.5rem;">🚢 ${t.inter_island_ferries}</button>
+                </div>
+                <div class="sponsor-area">
                     <a href="${sponsorBottomUrl}" target="_blank" rel="noopener noreferrer" class="sponsor-link">
                         <img class="sponsor-img" src="${safeSponsorBottomImg}" alt="Sponsor" onerror="this.src='${defaultSponsorImage}'; this.onerror=null;">
                     </a>
@@ -587,8 +681,7 @@
                     <p><strong>${t.contact}</strong><br><a href="mailto:mementomorikatsu@gmail.com">${t.email}</a></p>
                 </div>
             `;
-            appRoot.innerHTML = html;
-            // attach event listeners
+            document.getElementById("appRoot").innerHTML = html;
             document.querySelectorAll("[data-lang]").forEach(btn => {
                 btn.addEventListener("click", (e) => setLanguage(btn.getAttribute("data-lang")));
             });
@@ -596,12 +689,14 @@
             document.querySelectorAll(".detail-btn").forEach(btn => {
                 btn.addEventListener("click", (e) => {
                     const id = btn.getAttribute("data-id");
-                    if (id) navigateToDetail(id);
+                    if (id) navigateToIslandDetail(id);
                 });
             });
+            document.getElementById("interIslandBtn")?.addEventListener("click", navigateToFerryList);
         }
 
-        function renderDetail(islandId) {
+        // 島の詳細（従来通り）
+        function renderIslandDetail(islandId) {
             const island = islandsData[islandId];
             if (!island) return navigateHome();
             const t = translations[currentLang];
@@ -651,28 +746,139 @@
             });
             document.getElementById("darkmodeToggleBtnDetail")?.addEventListener("click", toggleTheme);
             document.getElementById("backToMainBtn")?.addEventListener("click", navigateHome);
-            document.getElementById("backHistoryBtn")?.addEventListener("click", () => { window.history.back(); });
+            document.getElementById("backHistoryBtn")?.addEventListener("click", () => window.history.back());
         }
 
-        // Handle popstate
+        // 航路一覧ページ
+        function renderFerryList() {
+            const t = translations[currentLang];
+            const langButtons = [
+                { code: "en", flag: "🇬🇧", label: "EN" },
+                { code: "it", flag: "🇮🇹", label: "IT" },
+                { code: "ru", flag: "🇷🇺", label: "RU" },
+                { code: "ja", flag: "🇯🇵", label: "JA" }
+            ];
+            const html = `
+                <div class="app-header">
+                    <h1 class="title-gradient">${t.app_title}</h1>
+                    <div class="controls">
+                        ${langButtons.map(lang => `<button class="${currentLang === lang.code ? 'active-lang' : ''}" data-lang="${lang.code}">${lang.flag} ${lang.label}</button>`).join('')}
+                        <button class="mode-toggle" id="darkmodeToggleBtnFerryList">${currentTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode'}</button>
+                    </div>
+                </div>
+                <div class="back-buttons">
+                    <button id="backToMainFromList">← ${t.back_home}</button>
+                </div>
+                <div class="detail-section">
+                    <h2>🚢 ${t.inter_island_ferries}</h2>
+                    <div id="ferryItems">
+                        <div class="ferry-item" data-ferry="zamami_aka">
+                            <div class="ferry-title">🚤 ${t.zamami_aka_title}</div>
+                            <p>${t.zamami_aka_desc}</p>
+                        </div>
+                        <div class="ferry-item" data-ferry="kerama_route">
+                            <div class="ferry-title">⚓ ${t.kerama_route_title}</div>
+                            <p>${t.kerama_route_desc}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer">
+                    <p><strong>${t.contact}</strong><br><a href="mailto:mementomorikatsu@gmail.com">${t.email}</a></p>
+                </div>
+            `;
+            document.getElementById("appRoot").innerHTML = html;
+            document.querySelectorAll("[data-lang]").forEach(btn => {
+                btn.addEventListener("click", (e) => setLanguage(btn.getAttribute("data-lang")));
+            });
+            document.getElementById("darkmodeToggleBtnFerryList")?.addEventListener("click", toggleTheme);
+            document.getElementById("backToMainFromList")?.addEventListener("click", navigateHome);
+            document.querySelectorAll(".ferry-item").forEach(item => {
+                item.addEventListener("click", (e) => {
+                    const ferryId = item.getAttribute("data-ferry");
+                    if (ferryId) navigateToFerryDetail(ferryId);
+                });
+            });
+        }
+
+        // 航路詳細ページ
+        function renderFerryDetail(ferryId) {
+            const ferry = ferryData[ferryId];
+            if (!ferry) return navigateToFerryList();
+            const t = translations[currentLang];
+            const langButtons = [
+                { code: "en", flag: "🇬🇧", label: "EN" },
+                { code: "it", flag: "🇮🇹", label: "IT" },
+                { code: "ru", flag: "🇷🇺", label: "RU" },
+                { code: "ja", flag: "🇯🇵", label: "JA" }
+            ];
+            const title = t[ferry.titleKey] || ferryId;
+            const desc = t[ferry.descKey] || "";
+            const html = `
+                <div class="app-header">
+                    <h1 class="title-gradient">${t.app_title}</h1>
+                    <div class="controls">
+                        ${langButtons.map(lang => `<button class="${currentLang === lang.code ? 'active-lang' : ''}" data-lang="${lang.code}">${lang.flag} ${lang.label}</button>`).join('')}
+                        <button class="mode-toggle" id="darkmodeToggleBtnFerryDetail">${currentTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode'}</button>
+                    </div>
+                </div>
+                <div class="back-buttons">
+                    <button id="backToFerryList">← ${t.back_to_list}</button>
+                    <button id="backHomeFromFerry">← ${t.back_home}</button>
+                </div>
+                <div class="detail-section">
+                    <h2>🚢 ${title}</h2>
+                    <p>${desc}</p>
+                    <hr>
+                    <h3>📅 ${t.schedule_summer}</h3>
+                    <pre style="white-space: pre-wrap; background: var(--bg-surface); padding: 1rem; border-radius: 1rem;">${ferry.timetable.summer}</pre>
+                    <h3>❄️ ${t.schedule_winter}</h3>
+                    <pre style="white-space: pre-wrap; background: var(--bg-surface); padding: 1rem; border-radius: 1rem;">${ferry.timetable.winter}</pre>
+                    <h3>💰 ${t.fare_info}</h3>
+                    <p>${ferry.fare}</p>
+                    <h3>📞 ${t.reservation_info}</h3>
+                    <p>${ferry.reservation}</p>
+                    <a class="official-link" href="${ferry.officialUrl}" target="_blank" rel="noopener noreferrer">🔗 ${t.official_website_zamami}</a>
+                </div>
+                <div class="footer">
+                    <p><strong>${t.contact}</strong><br><a href="mailto:mementomorikatsu@gmail.com">${t.email}</a></p>
+                </div>
+            `;
+            document.getElementById("appRoot").innerHTML = html;
+            document.querySelectorAll("[data-lang]").forEach(btn => {
+                btn.addEventListener("click", (e) => setLanguage(btn.getAttribute("data-lang")));
+            });
+            document.getElementById("darkmodeToggleBtnFerryDetail")?.addEventListener("click", toggleTheme);
+            document.getElementById("backToFerryList")?.addEventListener("click", navigateToFerryList);
+            document.getElementById("backHomeFromFerry")?.addEventListener("click", navigateHome);
+        }
+
+        // ブラウザバック対応
         window.addEventListener("popstate", (event) => {
             const state = event.state;
-            if (state && state.view === "detail" && state.islandId) {
-                currentView = "detail";
+            if (state && state.view === "island_detail" && state.islandId) {
+                currentView = "island_detail";
                 selectedIslandId = state.islandId;
-                renderDetail(selectedIslandId);
+                renderIslandDetail(selectedIslandId);
+            } else if (state && state.view === "ferry_list") {
+                currentView = "ferry_list";
+                renderFerryList();
+            } else if (state && state.view === "ferry_detail" && state.ferryId) {
+                currentView = "ferry_detail";
+                selectedFerryId = state.ferryId;
+                renderFerryDetail(selectedFerryId);
             } else {
                 currentView = "home";
                 selectedIslandId = null;
+                selectedFerryId = null;
                 renderHome();
             }
         });
 
-        // initial load
+        // 初期化
         setTheme(currentTheme);
         renderHome();
 
-        // register service worker
+        // Service Worker (PWA)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').then(reg => {
