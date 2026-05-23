@@ -57,7 +57,6 @@
             padding: 1.2rem 1.5rem 2rem;
         }
 
-        /* header */
         .app-header {
             text-align: center;
             margin-bottom: 2rem;
@@ -109,7 +108,6 @@
             background: var(--card-bg);
         }
 
-        /* cards & layout */
         .island-grid {
             display: flex;
             flex-direction: column;
@@ -169,7 +167,6 @@
             font-weight: bold;
         }
 
-        /* スポンサーエリア - アイコンサイズに統一 */
         .sponsor-area {
             margin: 1.5rem 0;
             text-align: center;
@@ -195,7 +192,6 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
-        /* 追加：座間味島の下に表示する特別なマップ画像スタイル */
         .extra-map-wrapper {
             margin: 0.5rem 0 0.8rem;
             border-radius: 1.5rem;
@@ -210,10 +206,8 @@
             height: auto;
             display: block;
             border-radius: 1.5rem;
-            transition: transform 0.2s ease;
         }
 
-        /* 地図はフル幅・角丸 */
         .map-wrapper {
             margin: 2rem 0 1rem;
             border-radius: 1.5rem;
@@ -327,11 +321,9 @@
     </style>
 </head>
 <body>
-    <div class="container" id="appRoot">
-        <!-- dynamic content will be rendered here -->
-    </div>
+    <div class="container" id="appRoot"></div>
     <script>
-        // ========== 編集エリア（スポンサー画像・リンク・地図画像を自由に変更できます） ==========
+        // ========== 画像・リンク設定 ==========
         const sponsorTopImage = "images/visitokinawajapan.jpeg";
         const sponsorTopUrl = "https://visitokinawajapan.com/destinations/kerama-islands/";
         const sponsorBottomImage = "images/myplace.png";
@@ -341,9 +333,12 @@
         const defaultSponsorImage = "https://placehold.co/200x200/ffb347/ffffff?text=Sponsor";
         const extraMapImageUrl = "images/map.png";
         const defaultExtraMapImage = "https://placehold.co/1200x400/2a5f5f/white?text=Kerama+Special+Map";
-        // ========================================================================
 
-        // ----------------------------- MULTI-LANG DATA ---------------------------------
+        // 電話番号（スマホ通話リンク用）
+        const RESERVATION_PHONE = "098-987-2614";
+        const RESERVATION_PHONE_LINK = `<a href="tel:${RESERVATION_PHONE.replace(/-/g, '')}" style="color: var(--accent); text-decoration: underline;">${RESERVATION_PHONE}</a>`;
+
+        // ----------------------------- 多言語データ（航路詳細を含む）---------------------------------
         const translations = {
             en: {
                 app_title: "Kerama Islands Escape",
@@ -362,16 +357,29 @@
                 official_website: "Official Website",
                 extra_map_caption: "📍 Snorkeling & Beach Map",
                 inter_island_ferries: "🚢 Inter-Island Ferries",
-                zamami_aka_title: "Zamami ⇔ Aka (Mitsushima)",
-                kerama_route_title: "Kerama Route (Reservation required)",
-                zamami_aka_desc: "4 daily trips, no reservation needed for Zamami-Aka section",
-                kerama_route_desc: "Connects Zamami/Aka with Tokashiki (Aharen port). Reservation mandatory.",
                 back_to_list: "← Back to Ferry List",
                 schedule_summer: "Summer Schedule (Mar–Oct)",
                 schedule_winter: "Winter Schedule (Nov–Feb)",
                 fare_info: "Fare",
                 reservation_info: "Reservation & Contact",
-                official_website_zamami: "Zamami Village Official Website"
+                official_website_zamami: "Zamami Village Official Website",
+                // 航路詳細: みつしま
+                ferry_zamami_aka: {
+                    title: "Zamami ⇔ Aka (Mitsushima)",
+                    desc: "4 daily trips, no reservation needed for Zamami-Aka section",
+                    schedule_summer: "【Summer (Mar–Oct)】\nTrip 1: Zamami 7:45 → Aka 8:00\nTrip 2: Zamami 11:45 → Aka 12:00\nTrip 3: Zamami 14:30 → Aka 14:45\nTrip 4: Zamami 17:30 → Aka 17:45\n※ Return trips from Aka depart shortly after arrival (same times).",
+                    schedule_winter: "【Winter (Nov–Feb)】\nTrip 1: Zamami 7:45 → Aka 8:00\nTrip 2: Zamami 11:45 → Aka 12:00\nTrip 3: Zamami 14:30 → Aka 14:45\nTrip 4: Zamami 17:20 → Aka 17:35",
+                    fare: "Zamami Port ⇔ Aka Port: Adult ¥500 / Child ¥250 (one way) *Environmental tax ¥100 extra for high school students+",
+                    reservation: "Reservations are NOT required for Zamami–Aka section. Buy ticket at the window before boarding.<br>For service to Aharen Port (Tokashiki Island), reservation required by phone: " + RESERVATION_PHONE_LINK + " (Hours 8:30–17:00, until 17:00 previous day)."
+                },
+                ferry_kerama_route: {
+                    title: "Kerama Route (Reservation required)",
+                    desc: "Connects Zamami/Aka with Tokashiki (Aharen port). Reservation mandatory.",
+                    schedule_summer: "【On‑demand service – Example schedule】\nZamami 8:30 → Aka 8:45 → Aharen 9:05\nAharen 9:05 → Aka 9:25 → Zamami 9:40\n\nZamami 15:30 → Aka 15:45 → Aharen 16:05\nAharen 16:05 → Aka 16:25 → Zamami 16:40",
+                    schedule_winter: "Same approximate times as summer (confirm before use). Reservation required by 17:00 the day before.",
+                    fare: "Tokashiki (Aharen) – Zamami / Aka: approx. ¥800 one way (please confirm when booking)",
+                    reservation: "⚡ Reservation mandatory (boat does NOT operate without reservation).<br>Call Zamami Village Office, Vessel & Tourism Section: " + RESERVATION_PHONE_LINK + "<br>Hours: 8:30–17:00. Deadline: 17:00 the day before your trip."
+                }
             },
             it: {
                 app_title: "Fuga alle Isole Kerama",
@@ -390,16 +398,28 @@
                 official_website: "Sito Ufficiale",
                 extra_map_caption: "📍 Mappa per Snorkeling & Spiagge",
                 inter_island_ferries: "🚢 Traghetti tra le isole",
-                zamami_aka_title: "Zamami ⇔ Aka (Mitsushima)",
-                kerama_route_title: "Rotta Kerama (prenotazione obbligatoria)",
-                zamami_aka_desc: "4 corse giornaliere, nessuna prenotazione per tratta Zamami-Aka",
-                kerama_route_desc: "Collega Zamami/Aka con Tokashiki (porto Aharen). Prenotazione obbligatoria.",
                 back_to_list: "← Torna all'elenco traghetti",
                 schedule_summer: "Orario estivo (Mar–Ott)",
                 schedule_winter: "Orario invernale (Nov–Feb)",
                 fare_info: "Tariffa",
                 reservation_info: "Prenotazione e contatti",
-                official_website_zamami: "Sito ufficiale del villaggio di Zamami"
+                official_website_zamami: "Sito ufficiale del villaggio di Zamami",
+                ferry_zamami_aka: {
+                    title: "Zamami ⇔ Aka (Mitsushima)",
+                    desc: "4 corse giornaliere, nessuna prenotazione per tratta Zamami-Aka",
+                    schedule_summer: "【Estate (Mar–Ott)】\n1ª corsa: Zamami 7:45 → Aka 8:00\n2ª corsa: Zamami 11:45 → Aka 12:00\n3ª corsa: Zamami 14:30 → Aka 14:45\n4ª corsa: Zamami 17:30 → Aka 17:45\n※ Il ritorno da Aka parte subito dopo l'arrivo (stessi orari).",
+                    schedule_winter: "【Inverno (Nov–Feb)】\n1ª corsa: Zamami 7:45 → Aka 8:00\n2ª corsa: Zamami 11:45 → Aka 12:00\n3ª corsa: Zamami 14:30 → Aka 14:45\n4ª corsa: Zamami 17:20 → Aka 17:35",
+                    fare: "Porto Zamami ⇔ Porto Aka: Adulto ¥500 / Bambino ¥250 (solo andata) *Tassa ambientale ¥100 extra per studenti+",
+                    reservation: "Nessuna prenotazione per tratta Zamami–Aka. Acquista il biglietto al bancone prima dell'imbarco.<br>Per il servizio per Aharen (Tokashiki) è obbligatoria la prenotazione telefonica: " + RESERVATION_PHONE_LINK + " (Orario 8:30–17:00, entro le 17:00 del giorno precedente)."
+                },
+                ferry_kerama_route: {
+                    title: "Rotta Kerama (prenotazione obbligatoria)",
+                    desc: "Collega Zamami/Aka con Tokashiki (porto Aharen). Prenotazione obbligatoria.",
+                    schedule_summer: "【Servizio su richiesta – Orario esempio】\nZamami 8:30 → Aka 8:45 → Aharen 9:05\nAharen 9:05 → Aka 9:25 → Zamami 9:40\n\nZamami 15:30 → Aka 15:45 → Aharen 16:05\nAharen 16:05 → Aka 16:25 → Zamami 16:40",
+                    schedule_winter: "Orari simili all'estate (confermare). Prenotazione entro le 17:00 del giorno prima.",
+                    fare: "Tokashiki (Aharen) – Zamami/Aka: circa ¥800 solo andata (confermare in fase di prenotazione)",
+                    reservation: "⚡ Prenotazione obbligatoria (il servizio non opera senza prenotazione).<br>Chiamare Ufficio Vessel & Tourism di Zamami: " + RESERVATION_PHONE_LINK + "<br>Orario: 8:30–17:00. Scadenza: 17:00 del giorno precedente."
+                }
             },
             ru: {
                 app_title: "Острова Керама: Рай",
@@ -418,16 +438,28 @@
                 official_website: "Официальный сайт",
                 extra_map_caption: "📍 Карта снорклинга и пляжей",
                 inter_island_ferries: "🚢 Межостровные паромы",
-                zamami_aka_title: "Дзамами ⇔ Ака (Мицусима)",
-                kerama_route_title: "Маршрут Керама (обязательное бронирование)",
-                zamami_aka_desc: "4 рейса в день, бронирование не требуется",
-                kerama_route_desc: "Соединяет Дзамами/Ака с Токашики (порт Ахарен). Бронирование обязательно.",
                 back_to_list: "← Назад к списку паромов",
                 schedule_summer: "Летнее расписание (март–окт)",
                 schedule_winter: "Зимнее расписание (ноя–фев)",
                 fare_info: "Стоимость",
                 reservation_info: "Бронирование и контакты",
-                official_website_zamami: "Официальный сайт деревни Дзамами"
+                official_website_zamami: "Официальный сайт деревни Дзамами",
+                ferry_zamami_aka: {
+                    title: "Дзамами ⇔ Ака (Мицусима)",
+                    desc: "4 рейса в день, бронирование не требуется",
+                    schedule_summer: "【Лето (март–окт)】\nРейс 1: Дзамами 7:45 → Ака 8:00\nРейс 2: Дзамами 11:45 → Ака 12:00\nРейс 3: Дзамами 14:30 → Ака 14:45\nРейс 4: Дзамами 17:30 → Ака 17:45\n※ Обратные рейсы с Ака отправляются вскоре после прибытия.",
+                    schedule_winter: "【Зима (ноя–фев)】\nРейс 1: Дзамами 7:45 → Ака 8:00\nРейс 2: Дзамами 11:45 → Ака 12:00\nРейс 3: Дзамами 14:30 → Ака 14:45\nРейс 4: Дзамами 17:20 → Ака 17:35",
+                    fare: "Порт Дзамами ⇔ Порт Ака: Взрослый ¥500 / Ребёнок ¥250 (в одну сторону) *Экологический налог ¥100 дополнительно",
+                    reservation: "Бронирование НЕ требуется для маршрута Дзамами–Ака. Купите билет в кассе перед посадкой.<br>Для маршрута до Ахарена (Токашики) необходима бронь по телефону: " + RESERVATION_PHONE_LINK + " (часы 8:30–17:00, до 17:00 предыдущего дня)."
+                },
+                ferry_kerama_route: {
+                    title: "Маршрут Керама (обязательное бронирование)",
+                    desc: "Соединяет Дзамами/Ака с Токашики (порт Ахарен). Бронирование обязательно.",
+                    schedule_summer: "【Служба по требованию – Пример расписания】\nДзамами 8:30 → Ака 8:45 → Ахарен 9:05\nАхарен 9:05 → Ака 9:25 → Дзамами 9:40\n\nДзамами 15:30 → Ака 15:45 → Ахарен 16:05\nАхарен 16:05 → Ака 16:25 → Дзамами 16:40",
+                    schedule_winter: "Примерно то же время, что и летом (уточните). Бронирование до 17:00 предыдущего дня.",
+                    fare: "Токашики (Ахарен) – Дзамами/Ака: около ¥800 в одну сторону (уточните при бронировании)",
+                    reservation: "⚡ Бронирование обязательно (без брони паром не ходит).<br>Звоните в отдел судоходства деревни Дзамами: " + RESERVATION_PHONE_LINK + "<br>Часы: 8:30–17:00. Дедлайн: 17:00 предыдущего дня."
+                }
             },
             ja: {
                 app_title: "慶良間諸島 楽園ガイド",
@@ -446,20 +478,32 @@
                 official_website: "公式サイト",
                 extra_map_caption: "📍 シュノーケリング＆ビーチマップ",
                 inter_island_ferries: "🚢 3島間の移動",
-                zamami_aka_title: "座間味島 ⇔ 阿嘉島（みつしま）",
-                kerama_route_title: "ケラマ航路（予約制）",
-                zamami_aka_desc: "1日4便運航。座間味－阿嘉間は予約不要",
-                kerama_route_desc: "座間味・阿嘉と渡嘉敷島（阿波連港）を結ぶ。要予約",
                 back_to_list: "← 航路一覧へ戻る",
                 schedule_summer: "夏季ダイヤ（3月～10月）",
                 schedule_winter: "冬季ダイヤ（11月～2月）",
                 fare_info: "運賃",
                 reservation_info: "予約方法・連絡先",
-                official_website_zamami: "座間味村公式ホームページ"
+                official_website_zamami: "座間味村公式ホームページ",
+                ferry_zamami_aka: {
+                    title: "座間味島 ⇔ 阿嘉島（みつしま）",
+                    desc: "1日4便運航。座間味－阿嘉間は予約不要",
+                    schedule_summer: "【夏季（3月～10月）】\n1便: 座間味 7:45 → 阿嘉 8:00\n2便: 座間味 11:45 → 阿嘉 12:00\n3便: 座間味 14:30 → 阿嘉 14:45\n4便: 座間味 17:30 → 阿嘉 17:45\n※阿嘉発は到着後すぐ折り返し（時刻はほぼ同じ）",
+                    schedule_winter: "【冬季（11月～2月）】\n1便: 座間味 7:45 → 阿嘉 8:00\n2便: 座間味 11:45 → 阿嘉 12:00\n3便: 座間味 14:30 → 阿嘉 14:45\n4便: 座間味 17:20 → 阿嘉 17:35",
+                    fare: "座間味港 ⇔ 阿嘉港: 大人500円 / 子供250円（片道）※環境協力税別途100円",
+                    reservation: "座間味～阿嘉区間は予約不要。窓口で乗船券購入。<br>阿波連港（渡嘉敷島）行きは要予約。電話: " + RESERVATION_PHONE_LINK + "（受付 8:30～17:00、前日17:00まで）"
+                },
+                ferry_kerama_route: {
+                    title: "ケラマ航路（予約制）",
+                    desc: "座間味・阿嘉と渡嘉敷島（阿波連港）を結ぶ。要予約",
+                    schedule_summer: "【オンデマンド運航・運行例】\n座間味発 8:30 → 阿嘉発 8:45 → 阿波連着 9:05\n阿波連発 9:05 → 阿嘉着 9:25 → 座間味着 9:40\n\n座間味発 15:30 → 阿嘉発 15:45 → 阿波連着 16:05\n阿波連発 16:05 → 阿嘉着 16:25 → 座間味着 16:40",
+                    schedule_winter: "冬季もほぼ同じ時刻で運行（要確認）。前日17:00までの予約が必要。",
+                    fare: "渡嘉敷島（阿波連港）～座間味島・阿嘉島間: 片道 約800円（予約時要確認）",
+                    reservation: "⚡ 完全予約制（予約がない場合は運航しません）<br>予約先: 座間味村役場 船舶・観光課 " + RESERVATION_PHONE_LINK + "<br>受付時間: 8:30～17:00（利用希望日の前日17:00まで）"
+                }
             }
         };
 
-        // Island data (existing)
+        // 島のデータ（既存）
         const islandsData = {
             tokashiki: {
                 id: "tokashiki",
@@ -502,38 +546,12 @@
             }
         };
 
-        // ----- 航路データ（追加）-----
-        const ferryData = {
-            zamami_aka: {
-                titleKey: "zamami_aka_title",
-                descKey: "zamami_aka_desc",
-                timetable: {
-                    summer: "【夏季（3月～10月）】\n1便: 座間味 7:45 → 阿嘉 8:00\n2便: 座間味 11:45 → 阿嘉 12:00\n3便: 座間味 14:30 → 阿嘉 14:45\n4便: 座間味 17:30 → 阿嘉 17:45\n※阿嘉発は到着後すぐ折り返し（時刻はほぼ同じ）",
-                    winter: "【冬季（11月～2月）】\n1便: 座間味 7:45 → 阿嘉 8:00\n2便: 座間味 11:45 → 阿嘉 12:00\n3便: 座間味 14:30 → 阿嘉 14:45\n4便: 座間味 17:20 → 阿嘉 17:35"
-                },
-                fare: "座間味港 ⇔ 阿嘉港: 大人500円 / 子供250円（片道）※環境協力税別途100円",
-                reservation: "座間味～阿嘉区間は予約不要。そのまま窓口で乗船券購入。\n阿波連港（渡嘉敷島）行きは要予約（098-987-2614）",
-                officialUrl: "https://www.vill.zamami.okinawa.jp/sempaku/mitsushima/"
-            },
-            kerama_route: {
-                titleKey: "kerama_route_title",
-                descKey: "kerama_route_desc",
-                timetable: {
-                    summer: "【運行例】要予約のオンデマンド運航\n座間味発 8:30 → 阿嘉発 8:45 → 阿波連着 9:05\n阿波連発 9:05 → 阿嘉着 9:25 → 座間味着 9:40\n\n座間味発 15:30 → 阿嘉発 15:45 → 阿波連着 16:05\n阿波連発 16:05 → 阿嘉着 16:25 → 座間味着 16:40",
-                    winter: "冬季もほぼ同じ時刻で運行（要確認）。前日17:00までの予約が必要。"
-                },
-                fare: "渡嘉敷島（阿波連港）～座間味島・阿嘉島間: 片道 約800円（予約時要確認）",
-                reservation: "完全予約制（予約がない場合は運航しません）\n予約先: 座間味村役場 船舶・観光課 TEL: 098-987-2614\n受付時間: 8:30～17:00（利用希望日の前日17:00まで）",
-                officialUrl: "https://www.vill.zamami.okinawa.jp/sempaku/"
-            }
-        };
-
-        // Global state
+        // グローバルステート
         let currentLang = localStorage.getItem("appLang") || "en";
         let currentTheme = localStorage.getItem("appTheme") || "dark";
-        let currentView = "home";            // home, island_detail, ferry_list, ferry_detail
+        let currentView = "home";
         let selectedIslandId = null;
-        let selectedFerryId = null;           // zamami_aka or kerama_route
+        let selectedFerryId = null;
 
         function setTheme(theme) {
             if (theme === "light") document.body.classList.add("light-mode");
@@ -565,7 +583,6 @@
             }
         }
 
-        // Navigation
         function navigateHome() {
             currentView = "home";
             selectedIslandId = null;
@@ -603,7 +620,7 @@
             else renderHome();
         }
 
-        // ---------- メインページ（3島＋新セクション）----------
+        // メインページ
         function renderHome() {
             const t = translations[currentLang];
             const islandEntries = [
@@ -623,7 +640,7 @@
             const safeExtraMapImg = getSafeImageUrl(extraMapImageUrl, defaultExtraMapImage);
 
             let islandsHtmlArray = [];
-            islandEntries.forEach((island, idx) => {
+            islandEntries.forEach((island) => {
                 islandsHtmlArray.push(`
                     <div class="island-card">
                         <img class="card-img" src="${island.img}" alt="${island.name}" onerror="this.src='https://placehold.co/600x400/2f6b47/white?text=Island+Photo'">
@@ -637,7 +654,7 @@
                 if (island.id === "zamami") {
                     islandsHtmlArray.push(`
                         <div class="extra-map-wrapper">
-                            <img class="extra-map-img" src="${safeExtraMapImg}" alt="${t.extra_map_caption || 'Additional Kerama Map'}" 
+                            <img class="extra-map-img" src="${safeExtraMapImg}" alt="${t.extra_map_caption}" 
                                  onerror="this.src='${defaultExtraMapImage}'; this.onerror=null;">
                         </div>
                     `);
@@ -668,7 +685,6 @@
                 <div class="island-grid" id="islandList">
                     ${islandsHtmlArray.join('')}
                 </div>
-                <!-- 追加: 3島間の移動ボタン -->
                 <div style="text-align: center; margin: 1rem 0 1.5rem;">
                     <button id="interIslandBtn" style="background: var(--accent); color: #1e2a2a; font-size: 1.2rem; padding: 0.7rem 1.5rem;">🚢 ${t.inter_island_ferries}</button>
                 </div>
@@ -695,7 +711,7 @@
             document.getElementById("interIslandBtn")?.addEventListener("click", navigateToFerryList);
         }
 
-        // 島の詳細（従来通り）
+        // 島詳細（変更なし）
         function renderIslandDetail(islandId) {
             const island = islandsData[islandId];
             if (!island) return navigateHome();
@@ -749,7 +765,7 @@
             document.getElementById("backHistoryBtn")?.addEventListener("click", () => window.history.back());
         }
 
-        // 航路一覧ページ
+        // 航路一覧
         function renderFerryList() {
             const t = translations[currentLang];
             const langButtons = [
@@ -773,12 +789,12 @@
                     <h2>🚢 ${t.inter_island_ferries}</h2>
                     <div id="ferryItems">
                         <div class="ferry-item" data-ferry="zamami_aka">
-                            <div class="ferry-title">🚤 ${t.zamami_aka_title}</div>
-                            <p>${t.zamami_aka_desc}</p>
+                            <div class="ferry-title">🚤 ${t.ferry_zamami_aka.title}</div>
+                            <p>${t.ferry_zamami_aka.desc}</p>
                         </div>
                         <div class="ferry-item" data-ferry="kerama_route">
-                            <div class="ferry-title">⚓ ${t.kerama_route_title}</div>
-                            <p>${t.kerama_route_desc}</p>
+                            <div class="ferry-title">⚓ ${t.ferry_kerama_route.title}</div>
+                            <p>${t.ferry_kerama_route.desc}</p>
                         </div>
                     </div>
                 </div>
@@ -800,19 +816,17 @@
             });
         }
 
-        // 航路詳細ページ
+        // 航路詳細（各国語対応、電話リンク付き）
         function renderFerryDetail(ferryId) {
-            const ferry = ferryData[ferryId];
-            if (!ferry) return navigateToFerryList();
             const t = translations[currentLang];
+            const ferry = t[`ferry_${ferryId}`];
+            if (!ferry) return navigateToFerryList();
             const langButtons = [
                 { code: "en", flag: "🇬🇧", label: "EN" },
                 { code: "it", flag: "🇮🇹", label: "IT" },
                 { code: "ru", flag: "🇷🇺", label: "RU" },
                 { code: "ja", flag: "🇯🇵", label: "JA" }
             ];
-            const title = t[ferry.titleKey] || ferryId;
-            const desc = t[ferry.descKey] || "";
             const html = `
                 <div class="app-header">
                     <h1 class="title-gradient">${t.app_title}</h1>
@@ -826,18 +840,18 @@
                     <button id="backHomeFromFerry">← ${t.back_home}</button>
                 </div>
                 <div class="detail-section">
-                    <h2>🚢 ${title}</h2>
-                    <p>${desc}</p>
+                    <h2>🚢 ${ferry.title}</h2>
+                    <p>${ferry.desc}</p>
                     <hr>
                     <h3>📅 ${t.schedule_summer}</h3>
-                    <pre style="white-space: pre-wrap; background: var(--bg-surface); padding: 1rem; border-radius: 1rem;">${ferry.timetable.summer}</pre>
+                    <pre style="white-space: pre-wrap; background: var(--bg-surface); padding: 1rem; border-radius: 1rem;">${ferry.schedule_summer}</pre>
                     <h3>❄️ ${t.schedule_winter}</h3>
-                    <pre style="white-space: pre-wrap; background: var(--bg-surface); padding: 1rem; border-radius: 1rem;">${ferry.timetable.winter}</pre>
+                    <pre style="white-space: pre-wrap; background: var(--bg-surface); padding: 1rem; border-radius: 1rem;">${ferry.schedule_winter}</pre>
                     <h3>💰 ${t.fare_info}</h3>
                     <p>${ferry.fare}</p>
                     <h3>📞 ${t.reservation_info}</h3>
                     <p>${ferry.reservation}</p>
-                    <a class="official-link" href="${ferry.officialUrl}" target="_blank" rel="noopener noreferrer">🔗 ${t.official_website_zamami}</a>
+                    <a class="official-link" href="https://www.vill.zamami.okinawa.jp/" target="_blank" rel="noopener noreferrer">🔗 ${t.official_website_zamami}</a>
                 </div>
                 <div class="footer">
                     <p><strong>${t.contact}</strong><br><a href="mailto:mementomorikatsu@gmail.com">${t.email}</a></p>
@@ -878,7 +892,6 @@
         setTheme(currentTheme);
         renderHome();
 
-        // Service Worker (PWA)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').then(reg => {
